@@ -1,19 +1,44 @@
 from selenium import webdriver
 import time
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def albertijn_data() -> list[dict]:
     all_products = []
     driver = webdriver.Chrome()
     driver.get("https://www.ah.nl/bonus")
     time.sleep(2)
-    products = driver.find_elements(By.CSS_SELECTOR, '[data-testhook="promotion-card"]')
-    validity = driver.find_element(By.CSS_SELECTOR, '.period-toggle-button_label__rRyWQ')
-    date = validity.text
-    print(date)
+
+    wait = WebDriverWait(driver, 10)
+    try:
+        validity = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="period-toggle-button"] p'))
+        )
+        date = validity.text
+    except:
+        date = "Unknown"
+        print("WARNING: Could not find date element")
+    try:
+        cookie_button = wait.until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, '[data-testid="accept-cookies"]'))
+        )
+        cookie_button.click()
+        print("Cookies accepted")
+    except:
+        print("No cookie popup found, continuing...")
+    wait_longer = WebDriverWait(driver, 20)
+    try:
+        products = wait_longer.until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '[data-testid="promotion-card"]'))
+        )
+    except:
+        print("WARNING: Could not find products")
+        driver.quit()
+        return []
     iteration = 1
     for product in products:
-        title = product.get_attribute("title")
+        title = product.find_element(By.CSS_SELECTOR, '[data-testid="card-title"]').text
         discount_label = product.get_attribute("aria-label")
         href = product.get_attribute("href")
         discount_info = [discount_label]
