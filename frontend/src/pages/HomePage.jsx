@@ -1,44 +1,11 @@
-import { useState, useEffect } from 'react'
-import { Helmet } from 'react-helmet-async'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Layout from '../components/layout/Layout'
-import DealCard from '../components/deals/DealCard'
-import client from '../api/client'
+import DealGrid from '../components/deals/DealGrid'
 
 export default function HomePage() {
-  const [deals, setDeals] = useState([])
-  const [stores, setStores] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [dealsRes, storesRes] = await Promise.all([
-          client.get('/deals'),
-          client.get('/stores'),
-        ])
-        setDeals(dealsRes.data.data)
-        setStores(storesRes.data)
-      } catch (err) {
-        console.error('Failed to fetch data:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
-
-  const totalDeals = deals.length
-  const totalStores = stores.length
-  const discountTypes = new Set(deals.map(d => d.discount_types?.label).filter(Boolean)).size
-
-  const stats = [
-    { label: 'Deals deze week', value: totalDeals },
-    { label: 'Supermarkten', value: totalStores },
-    { label: 'Soorten korting', value: discountTypes },
-  ]
-
-  const featuredDeals = deals.slice(0, 6)
+  const [query, setQuery] = useState('')
 
   return (
     <Layout>
@@ -47,75 +14,69 @@ export default function HomePage() {
       </Helmet>
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center text-center px-4 py-24 md:py-36">
-        <h1 className="text-4xl md:text-6xl font-bold text-[#F9FAFB] max-w-3xl leading-tight">
-          Vind de beste supermarkt deals
-        </h1>
-        <p className="mt-6 text-lg md:text-xl text-[#9CA3AF] max-w-xl">
-          Vergelijk aanbiedingen van Albert Heijn, Jumbo, Lidl en meer
-        </p>
-        <Link
-          to="/deals"
-          className="mt-10 inline-block px-8 py-3.5 rounded-xl text-white font-semibold text-base transition-colors hover:opacity-90"
-          style={{ backgroundColor: '#00833E' }}
-        >
-          Bekijk aanbiedingen
-        </Link>
-      </section>
+      <section
+        className="w-full flex flex-col md:flex-row items-center pl-4 md:pl-16 pr-4 md:pr-8 py-12 md:py-0 gap-10 min-h-screen"
+        style={{ backgroundColor: '#111614' }}
+      >
+        {/* Left: 60% */}
+        <div className="w-full md:w-3/5 flex flex-col gap-6 pl-0 md:pl-16 justify-center">
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+            <span className="text-white">Vind de beste</span>
+            <br />
+            <span style={{ color: '#4caf50' }}>supermarkt deals</span>
+          </h1>
 
-      {/* Stats */}
-      <section className="max-w-6xl mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {stats.map(stat => (
-            <div
-              key={stat.label}
-              className="bg-[#1F2937] rounded-2xl border border-[#374151] p-6 flex flex-col items-center text-center"
+          <p className="text-lg" style={{ color: '#a0b8a8' }}>
+            ML-powered deals &amp; stats
+          </p>
+
+          {/* Search bar */}
+          <div
+            className="flex items-center w-full max-w-lg rounded-full overflow-hidden"
+            style={{ backgroundColor: '#ffffff' }}
+          >
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="Zoek een product..."
+              className="flex-1 px-5 py-3 text-sm bg-transparent outline-none text-gray-800 placeholder-gray-400"
+            />
+            <button
+              className="px-5 py-3 text-sm font-semibold text-white flex-shrink-0"
+              style={{ backgroundColor: '#4caf50' }}
             >
-              <span className="text-4xl font-extrabold text-[#F9FAFB]">
-                {loading ? '—' : stat.value}
-              </span>
-              <span className="mt-1 text-sm text-[#9CA3AF]">{stat.label}</span>
-            </div>
-          ))}
+              Zoeken
+            </button>
+          </div>
+
+          {/* CTA */}
+          <div>
+            <Link
+              to="/aanbiedingen"
+              className="inline-block px-8 py-3 rounded-full text-white font-semibold text-sm transition-opacity hover:opacity-90"
+              style={{ backgroundColor: '#4caf50' }}
+            >
+              Bekijk aanbiedingen
+            </Link>
+          </div>
+        </div>
+
+        {/* Right: 40% */}
+        <div className="w-full md:w-2/5" style={{ maxWidth: '500px' }}>
+          <DealGrid limit={4} />
         </div>
       </section>
 
-      {/* Featured deals */}
-      <section className="max-w-6xl mx-auto px-4 pb-24">
-        <h2 className="text-2xl font-bold text-[#F9FAFB] mb-6">Beste deals deze week</h2>
-
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <div className="w-8 h-8 rounded-full border-4 border-[#374151] border-t-[#00833E] animate-spin" />
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {featuredDeals.map((deal, i) => (
-                <DealCard
-                  key={deal.id ?? i}
-                  product={deal.product}
-                  discountRaw={deal.discount_raw ?? deal.discountRaw}
-                  discountType={deal.discount_types?.label ?? deal.discount}
-                  store={deal.stores?.name ?? deal.store}
-                  startDate={deal.start_date}
-                  endDate={deal.end_date}
-                  link={deal.link}
-                />
-              ))}
-            </div>
-
-            <div className="mt-10 flex justify-center">
-              <Link
-                to="/deals"
-                className="px-8 py-3.5 rounded-xl text-white font-semibold text-base transition-colors hover:opacity-90"
-                style={{ backgroundColor: '#00833E' }}
-              >
-                Bekijk alle aanbiedingen
-              </Link>
-            </div>
-          </>
-        )}
+      {/* Beste deals deze week */}
+      <section
+        className="w-full pl-16 pr-8 py-12"
+        style={{ backgroundColor: '#111614' }}
+      >
+        <h2 className="text-2xl font-bold text-white mb-4">
+          Beste deals deze week
+        </h2>
+        <DealGrid limit={8} />
       </section>
     </Layout>
   )
