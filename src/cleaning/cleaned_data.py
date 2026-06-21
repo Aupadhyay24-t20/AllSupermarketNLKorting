@@ -58,7 +58,8 @@ def extract_discount_pct(discount_text):
     return float(match.group(1)) if match else None
 
 files = [
-    ('../data/AH_cleaned_3.json', '2026-05-11')
+    ('../data/J_cleaned_7.json', '2026-06-17'),
+    ('../data/AH_cleaned_8.json', '2026-06-15')
 ]
 
 total = 0
@@ -79,9 +80,9 @@ for filepath, week in files:
             'discount_type_id': get_discount_type_id(deal.get('discount')),
             'start_date':       deal.get('start_date'),
             'end_date':         deal.get('end_date'),
-            'week_scraped':     week
+            'week_scraped':     week,
+            'image_url':        deal.get('image_url')
         })
-
 
     supabase.table('deals').insert(rows).execute()
     total += len(rows)

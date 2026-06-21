@@ -1,11 +1,26 @@
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import DealCard from './DealCard'
+
+const gridVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07 } },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+}
 
 function SkeletonCard() {
   return (
     <div
-      className="animate-pulse rounded-xl"
-      style={{ backgroundColor: '#1a3d2b', height: '16rem' }}
+      className="animate-pulse rounded-2xl"
+      style={{
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.07)',
+        height: '18rem',
+      }}
     />
   )
 }
@@ -40,7 +55,7 @@ export default function DealGrid({ deals: dealsProp, limit }) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.from({ length: 8 }).map((_, i) => (
           <SkeletonCard key={i} />
         ))}
@@ -50,7 +65,7 @@ export default function DealGrid({ deals: dealsProp, limit }) {
 
   if (error) {
     return (
-      <p className="text-center py-16 text-sm" style={{ color: '#a0b8a8' }}>
+      <p className="text-center py-16 text-sm" style={{ color: '#444444' }}>
         Kon deals niet laden, probeer het later opnieuw.
       </p>
     )
@@ -58,7 +73,7 @@ export default function DealGrid({ deals: dealsProp, limit }) {
 
   if (!deals.length) {
     return (
-      <p className="text-center py-16 text-sm" style={{ color: '#a0b8a8' }}>
+      <p className="text-center py-16 text-sm" style={{ color: '#444444' }}>
         Geen aanbiedingen gevonden.
       </p>
     )
@@ -67,19 +82,25 @@ export default function DealGrid({ deals: dealsProp, limit }) {
   const visible = limit ? deals.slice(0, limit) : deals
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4">
+    <motion.div
+      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      variants={gridVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {visible.map((deal, i) => (
-        <DealCard
-          key={deal.id ?? i}
-          product={deal.product}
-          discount_raw={deal.discount_raw}
-          image_url={deal.image_url}
-          link={deal.link}
-          store_name={deal.stores?.name}
-          store_logo_url={deal.stores?.logo_url}
-          end_date={deal.end_date}
-        />
+        <motion.div key={deal.id ?? i} variants={cardVariants} style={{ height: '100%' }}>
+          <DealCard
+            product={deal.product}
+            discount_raw={deal.discount_raw}
+            image_url={deal.image_url}
+            link={deal.link}
+            store_name={deal.stores?.name}
+            store_logo_url={deal.stores?.logo_url}
+            end_date={deal.end_date}
+          />
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   )
 }

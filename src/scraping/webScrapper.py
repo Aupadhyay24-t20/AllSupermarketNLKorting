@@ -42,16 +42,25 @@ def albertijn_data() -> list[dict]:
         discount_label = product.get_attribute("aria-label")
         href = product.get_attribute("href")
         discount_info = [discount_label]
+
+        try:
+            img_element = product.find_element(By.CSS_SELECTOR, '[class*="promotion-card-image_img"]')
+            image_url = img_element.get_attribute("src")
+        except:
+            image_url = None
+
         print(f"[{iteration}]Product: {title}")
         print(f"Deal: {discount_info}")
         print(f"Link: {href}")
+        print(f"Image: {image_url}")
         print("---")
         product_date = {
             "product": title,
             "discount": discount_info,
             "link": href,
             "store": "Albertijn",
-            "date": date
+            "date": date,
+            "image_url": image_url
         }
         all_products.append(product_date)
         iteration += 1
@@ -101,20 +110,27 @@ def jumbo_data() -> list[dict]:
                 else:
                     discount_info = tag.text.strip()
 
+            try:
+                img_element = j_product.find_element(By.CSS_SELECTOR, '[data-testid="jum-card-image"] img')
+                image_url = img_element.get_attribute("src")
+            except:
+                image_url = None
+
             print(f"[{i + 1}] Product: {title}")
             print(f"     Discount: {discount_info}")
             print(f"     Link: {href}")
             print(f"     Date: {date}")
+            print(f"     Image: {image_url}")
             product_date = {
                 "product": title,
                 "discount": discount_info,
                 "link": href,
                 "store": "Jumbo",
-                "date": date
+                "date": date,
+                "image_url": image_url
             }
             all_jproducts.append(product_date)
         except Exception as e:
             print(f"[{i + 1}] Skipped: {e}")
     jdriver.quit()
     return all_jproducts
-

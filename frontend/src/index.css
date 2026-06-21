@@ -1,33 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --color-bg-primary: #111614;
-  --color-bg-card: #1a3d2b;
-  --color-accent-primary: #4caf50;
-  --color-accent-secondary: #eeb717;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a0b8a8;
-  --color-border: #2d5a3d;
+  --bg:        #090909;
+  --surface:   rgba(255,255,255,0.04);
+  --surface-2: rgba(255,255,255,0.08);
+  --border:    rgba(255,255,255,0.09);
+  --border-2:  rgba(255,255,255,0.16);
+  --accent:    #22c55e;
+  --accent-dim:#16a34a;
+  --warm:      #fbbf24;
+  --text-1:    #ffffff;
+  --text-2:    #666666;
+  --text-3:    #444444;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
 
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-optical-sizing: auto;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html {
-  font-size: 16px;
-}
+html { font-size: 16px; scroll-behavior: smooth; }
 
 body {
-  font-size: 1rem;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--bg);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* glass utility */
+.glass {
+  background: var(--surface);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--border);
+}
+
+.glass-2 {
+  background: var(--surface-2);
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  border: 1px solid var(--border-2);
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }

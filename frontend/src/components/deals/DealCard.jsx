@@ -1,8 +1,8 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 function parsePrice(discount_raw) {
   if (!discount_raw) return null
-
   const vanVoor = discount_raw.match(/van\s+([\d.,]+)\s+voor\s+([\d.,]+)/i)
   if (vanVoor) {
     return {
@@ -11,16 +11,10 @@ function parsePrice(discount_raw) {
       deal: parseFloat(vanVoor[2].replace(',', '.')),
     }
   }
-
-  // Only match "voor X" when preceded by start-of-string or "uitgelicht" — not a number
   const voorOnly = discount_raw.match(/(?:^|uitgelicht\s+)voor\s+([\d.,]+)/i)
   if (voorOnly) {
-    return {
-      type: 'voor_only',
-      deal: parseFloat(voorOnly[1].replace(',', '.')),
-    }
+    return { type: 'voor_only', deal: parseFloat(voorOnly[1].replace(',', '.')) }
   }
-
   return null
 }
 
@@ -43,187 +37,205 @@ export default function DealCard({
   end_date,
 }) {
   const [imgError, setImgError] = useState(false)
+  const [hovered, setHovered] = useState(false)
   const price = parsePrice(discount_raw)
   const showBadge = !price && discount_raw
+  const savings = price?.type === 'van_voor'
+    ? Math.round((price.original - price.deal) * 100) / 100
+    : null
 
   return (
-    <div
+    <motion.div
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+      onClick={() => link && window.open(link, '_blank', 'noopener,noreferrer')}
       style={{
-        backgroundColor: '#ffffff',
+        height: '100%',
         borderRadius: '16px',
-        padding: '1rem',
-        maxWidth: '260px',
-        margin: '0 auto',
-        boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        gap: '0.5rem',
-        position: 'relative',
         width: '100%',
+        cursor: 'pointer',
+        background: '#1c1c1c',
+        border: hovered
+          ? '1px solid rgba(34,197,94,0.4)'
+          : '1px solid rgba(255,255,255,0.09)',
+        boxShadow: hovered
+          ? '0 0 0 1px rgba(34,197,94,0.1), 0 16px 36px rgba(0,0,0,0.5)'
+          : '0 2px 12px rgba(0,0,0,0.35)',
+        transition: 'border 0.25s, box-shadow 0.25s',
       }}
     >
-      {/* Top section: image + name + date */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
-        {/* Product image with logo overlay */}
-        <div
-          style={{
-            height: '160px',
-            width: '100%',
-            backgroundColor: '#ffffff',
-            borderRadius: '12px',
-            border: '1px solid #e0e0e0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            overflow: 'visible',
-            position: 'relative',
-          }}
-        >
+      {/* ── Image ── */}
+      <div style={{
+        height: '148px',
+        flexShrink: 0,
+        background: '#ffffff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        borderBottom: '1px solid rgba(0,0,0,0.06)',
+      }}>
+        {image_url && !imgError ? (
+          <img
+            src={image_url}
+            alt={product}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '14px' }}
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <span style={{ color: '#999999', fontSize: '0.75rem' }}>Geen afbeelding</span>
+        )}
+      </div>
+
+      {/* ── Content ── */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0.875rem',
+        gap: '0.6rem',
+      }}>
+
+        {/* Store row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           {store_logo_url && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '-10px',
-                left: '-10px',
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                backgroundColor: '#ffffff',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 1,
-              }}
-            >
+            <div style={{
+              width: '20px',
+              height: '20px',
+              borderRadius: '50%',
+              background: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
               <img
                 src={store_logo_url}
                 alt={store_name}
-                style={{ width: '30px', height: '30px', objectFit: 'contain', transform: 'scale(1.1)' }}
+                style={{ width: '14px', height: '14px', objectFit: 'contain' }}
               />
             </div>
           )}
-
-          <div style={{ position: 'relative', zIndex: 0, width: '100%', height: '100%', borderRadius: '12px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {image_url && !imgError ? (
-              <img
-                src={image_url}
-                alt={product}
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <span style={{ color: '#a0b8a8', fontSize: '0.75rem' }}>Geen afbeelding</span>
-            )}
-          </div>
+          {store_name && (
+            <span style={{ fontSize: '0.7rem', color: '#666666', fontWeight: 500 }}>
+              {store_name}
+            </span>
+          )}
         </div>
 
         {/* Product name */}
-        <p
-          style={{
-            color: '#1a1a1a',
-            fontWeight: 700,
-            fontSize: '1rem',
-            lineHeight: '1.375',
-            minHeight: '2.5rem',
-            textAlign: 'center',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            margin: 0,
-            width: '100%',
-          }}
-        >
+        <p style={{
+          color: '#ffffff',
+          fontWeight: 600,
+          fontSize: '0.85rem',
+          lineHeight: 1.4,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          minHeight: '2.38rem',
+          margin: 0,
+        }}>
           {product}
         </p>
 
-        {/* Validity */}
-        {end_date && (
-          <p style={{ color: '#888888', fontSize: '0.75rem', textAlign: 'center', margin: 0, width: '100%' }}>
-            Geldig t/m {end_date}
-          </p>
-        )}
-      </div>
+        {/* ── Discount info (below product name) ── */}
+        <div style={{ minHeight: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {price?.type === 'van_voor' && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem', flexWrap: 'wrap' }}>
+                <span style={{ fontWeight: 800, fontSize: '1.2rem', color: '#ffffff', letterSpacing: '-0.02em' }}>
+                  {fmtPrice(price.deal)}
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#555555', textDecoration: 'line-through' }}>
+                  {fmtPrice(price.original)}
+                </span>
+              </div>
+              {savings != null && (
+                <span style={{
+                  display: 'inline-block',
+                  marginTop: '4px',
+                  padding: '2px 8px',
+                  borderRadius: '9999px',
+                  background: '#22c55e',
+                  color: '#000000',
+                  fontSize: '0.67rem',
+                  fontWeight: 700,
+                }}>
+                  Bespaar {fmtPrice(savings)}
+                </span>
+              )}
+            </div>
+          )}
 
-      {/* Bottom section: price/badge + button */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%', alignItems: 'flex-start' }}>
-
-        {/* Price: van X voor Y */}
-        {price?.type === 'van_voor' && (
-          <div style={{ width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#1a1a1a' }}>
+          {price?.type === 'voor_only' && (
+            <div>
+              <span style={{ fontSize: '0.68rem', color: '#666666', display: 'block' }}>Aanbiedingsprijs</span>
+              <span style={{ fontWeight: 800, fontSize: '1.2rem', color: '#ffffff', letterSpacing: '-0.02em' }}>
                 {fmtPrice(price.deal)}
               </span>
-              <span style={{ fontSize: '0.8rem', color: '#999999', textDecoration: 'line-through' }}>
-                {fmtPrice(price.original)}
-              </span>
             </div>
-            <p style={{ margin: 0, fontSize: '0.7rem', color: '#4caf50', fontWeight: 600 }}>
-              Bespaar {fmtPrice(Math.round((price.original - price.deal) * 100) / 100)}
-            </p>
-          </div>
-        )}
+          )}
 
-        {/* Price: voor X / uitgelicht voor X */}
-        {price?.type === 'voor_only' && (
-          <div style={{ width: '100%' }}>
-            <p style={{ margin: 0, fontSize: '0.7rem', color: '#888888' }}>Aanbiedingsprijs</p>
-            <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#1a1a1a' }}>
-              {fmtPrice(price.deal)}
-            </span>
-          </div>
-        )}
-
-        {/* Discount badge — only when no price parsed */}
-        {showBadge && (
-          <div style={{ width: '100%' }}>
-            <span
-              style={{
-                display: 'inline-block',
-                backgroundColor: '#4caf50',
-                borderRadius: '999px',
-                padding: '4px 12px',
-                fontWeight: 800,
-                fontSize: '0.75rem',
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                color: '#ffffff',
-                maxWidth: '100%',
-                wordBreak: 'break-word',
-                boxSizing: 'border-box',
-              }}
-            >
+          {showBadge && (
+            <span style={{
+              display: 'block',
+              fontSize: '1rem',
+              fontWeight: 800,
+              color: '#ffffff',
+              letterSpacing: '-0.02em',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}>
               {cleanDiscount(discount_raw) || discount_raw}
             </span>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* CTA button */}
-        <button
+        {/* Validity */}
+        <p style={{
+          fontSize: '0.7rem',
+          color: '#555555',
+          margin: 0,
+          visibility: end_date ? 'visible' : 'hidden',
+        }}>
+          {end_date ? `Geldig t/m ${end_date}` : '—'}
+        </p>
+
+        {/* Spacer */}
+        <div style={{ flex: 1 }} />
+
+        {/* CTA */}
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          onClick={e => {
+            e.stopPropagation()
+            link && window.open(link, '_blank', 'noopener,noreferrer')
+          }}
           style={{
             width: '100%',
-            backgroundColor: '#4caf50',
-            color: '#ffffff',
-            fontWeight: 600,
-            fontSize: '0.875rem',
-            padding: '0.5rem 0',
-            borderRadius: '12px',
+            padding: '10px 0',
+            borderRadius: '9999px',
             border: 'none',
+            background: hovered ? '#16a34a' : '#22c55e',
+            color: '#000000',
+            fontWeight: 700,
+            fontSize: '0.8rem',
             cursor: 'pointer',
-            textAlign: 'center',
-            transition: 'background-color 0.2s',
+            transition: 'background 0.2s',
+            letterSpacing: '0.01em',
+            marginTop: '0.25rem',
           }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#43a047')}
-          onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#4caf50')}
-          onClick={() => link && window.open(link, '_blank', 'noopener,noreferrer')}
         >
-          Bekijk deal
-        </button>
+          Bekijk deal →
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   )
 }

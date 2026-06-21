@@ -68,7 +68,7 @@ def get_deals(
 
     query = (
         supabase.table("deals")
-        .select("*, stores(name), discount_types(label)")
+        .select("*, stores(name, logo_url), discount_types(label)")
         .in_("week_scraped", recent_weeks)
         .limit(limit)
     )
@@ -89,7 +89,7 @@ def search_deals(q: str = Query(..., min_length=2)):
 
     all_data = (
         supabase.table("deals")
-        .select("*, stores(name), discount_types(label)")
+        .select("*, stores(name, logo_url), discount_types(label)")
         .in_("week_scraped", recent_weeks)
         .ilike("product", f"%{q}%")
         .execute()
