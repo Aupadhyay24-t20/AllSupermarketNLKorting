@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import DealCard from './DealCard'
+import { DealCard } from '../ds/DealCard'
+import { mapDealToCardProps } from '../ds/mapDealToCardProps'
 
 const gridVariants = {
   hidden: {},
@@ -12,30 +13,29 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
 }
 
+const gridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(185px, 1fr))', gap: '1rem' }
+
 function SkeletonCard() {
   return (
     <div
-      className="animate-pulse rounded-2xl"
+      className="animate-pulse"
       style={{
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--c-surface-alt)',
+        border: '1px solid var(--c-border)',
+        borderRadius: 'var(--r-md)',
         height: '18rem',
       }}
     />
   )
 }
 
-export default function DealGrid({ deals: dealsProp, limit }) {
-  const [deals, setDeals] = useState([])
-  const [loading, setLoading] = useState(true)
+export default function DealGrid({ deals: dealsProp, limit, featureFirst = false }) {
+  const [fetchedDeals, setFetchedDeals] = useState([])
+  const [fetching, setFetching] = useState(dealsProp === undefined)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (dealsProp !== undefined) {
-      setDeals(dealsProp)
-      setLoading(false)
-      return
-    }
+    if (dealsProp !== undefined) return
 
     fetch(`${import.meta.env.VITE_API_URL}/deals`)
       .then(res => {
@@ -44,18 +44,21 @@ export default function DealGrid({ deals: dealsProp, limit }) {
       })
       .then(data => {
         const list = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : [])
-        setDeals(list)
-        setLoading(false)
+        setFetchedDeals(list)
+        setFetching(false)
       })
       .catch(err => {
         setError(err.message)
-        setLoading(false)
+        setFetching(false)
       })
   }, [dealsProp])
 
+  const deals = dealsProp !== undefined ? dealsProp : fetchedDeals
+  const loading = dealsProp === undefined && fetching
+
   if (loading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div style={gridStyle}>
         {Array.from({ length: 8 }).map((_, i) => (
           <SkeletonCard key={i} />
         ))}
@@ -65,7 +68,7 @@ export default function DealGrid({ deals: dealsProp, limit }) {
 
   if (error) {
     return (
-      <p className="text-center py-16 text-sm" style={{ color: '#444444' }}>
+      <p style={{ textAlign: 'center', padding: '4rem 0', fontSize: '0.875rem', color: 'var(--c-text-subtle)' }}>
         Kon deals niet laden, probeer het later opnieuw.
       </p>
     )
@@ -73,7 +76,7 @@ export default function DealGrid({ deals: dealsProp, limit }) {
 
   if (!deals.length) {
     return (
-      <p className="text-center py-16 text-sm" style={{ color: '#444444' }}>
+      <p style={{ textAlign: 'center', padding: '4rem 0', fontSize: '0.875rem', color: 'var(--c-text-subtle)' }}>
         Geen aanbiedingen gevonden.
       </p>
     )
@@ -82,23 +85,10 @@ export default function DealGrid({ deals: dealsProp, limit }) {
   const visible = limit ? deals.slice(0, limit) : deals
 
   return (
-    <motion.div
-      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-      variants={gridVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <motion.div style={gridStyle} variants={gridVariants} initial="hidden" animate="visible">
       {visible.map((deal, i) => (
         <motion.div key={deal.id ?? i} variants={cardVariants} style={{ height: '100%' }}>
-          <DealCard
-            product={deal.product}
-            discount_raw={deal.discount_raw}
-            image_url={deal.image_url}
-            link={deal.link}
-            store_name={deal.stores?.name}
-            store_logo_url={deal.stores?.logo_url}
-            end_date={deal.end_date}
-          />
+          <DealCard {...mapDealToCardProps(deal)} featured={featureFirst && i === 0} />
         </motion.div>
       ))}
     </motion.div>

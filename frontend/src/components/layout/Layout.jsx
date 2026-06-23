@@ -3,7 +3,7 @@ import Footer from './Footer'
 
 export default function Layout({ children }) {
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#090909' }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--c-bg)' }}>
       <Header />
       <main className="flex-1">
         {children}

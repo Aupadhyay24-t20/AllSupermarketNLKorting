@@ -1,0 +1,142 @@
+/* ═══════════════════════════════════════════════════════════════
+   FRESCO DESIGN SYSTEM — TOKENS v1.0
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Fonts ───────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* ── COLOR / BRAND ───────────────────────────────────────── */
+  --c-brand:           #1e6b3c;   /* primary green */
+  --c-brand-hover:     #185c33;
+  --c-brand-tint:      #d1ead9;   /* soft green pill bg */
+  --c-brand-bg:        #edf7f0;   /* nav active bg */
+  --c-brand-surface:   #f2f9f5;   /* hover surface */
+  --c-brand-deep:      #e6f4ec;   /* deeper surface */
+
+  /* ── COLOR / ACCENT ──────────────────────────────────────── */
+  --c-discount-grad:   linear-gradient(135deg, #f97316, #dc2626);
+  --c-discount-soft:   #fef0e6;   /* bottom badge bg */
+  --c-discount-text:   #c2400c;   /* bottom badge text */
+  --c-amber:           #f59e0b;   /* "Top deal" pill */
+
+  /* ── COLOR / STORE BRANDING ──────────────────────────────── */
+  --c-ah:              #f97316;   /* Albert Heijn */
+  --c-jumbo:           #dc2626;   /* Jumbo */
+
+  /* ── COLOR / SEMANTIC ────────────────────────────────────── */
+  --c-success:         #16a34a;
+  --c-danger:          #dc2626;
+  --c-warning:         #f59e0b;
+  --c-info:            #2563eb;
+
+  /* ── COLOR / NEUTRAL ─────────────────────────────────────── */
+  --c-text:            #0f172a;
+  --c-text-muted:      #475569;
+  --c-text-subtle:     #94a3b8;
+  --c-bg:              #ffffff;
+  --c-surface:         #ffffff;
+  --c-surface-alt:     #f2f9f5;
+  --c-border:          rgba(15, 23, 42, 0.09);
+  --c-border-strong:   rgba(15, 23, 42, 0.15);
+
+  /* ── COLOR / CATEGORY TINTS (deal image backgrounds) ─────── */
+  --tint-groenten:     #f0fff4;
+  --tint-vlees:        #fff5f5;
+  --tint-zuivel:       #f0f9ff;
+  --tint-dranken:      #fef9ee;
+  --tint-snacks:       #fef3f2;
+  --tint-huishouden:   #f5f3ff;
+  --tint-diepvries:    #eff6ff;
+  --tint-default:      #f8faff;
+
+  /* ── TYPE / FAMILY ───────────────────────────────────────── */
+  --font-display:      'DM Serif Display', Georgia, serif;
+  --font-sans:         'Outfit', system-ui, -apple-system, sans-serif;
+
+  /* ── TYPE / SCALE ────────────────────────────────────────── */
+  --t-display:         clamp(2.8rem, 5.5vw, 4.5rem);
+  --t-h1:              1.75rem;
+  --t-h2:              1.5rem;
+  --t-h3:              1.25rem;
+  --t-h4:              1.1rem;
+  --t-body:            1rem;
+  --t-body-sm:         0.875rem;
+  --t-meta:            0.8rem;
+  --t-label:           0.72rem;
+  --t-caption:         0.67rem;
+  --t-micro:           0.6rem;
+
+  /* ── TYPE / WEIGHT ───────────────────────────────────────── */
+  --w-light:           300;
+  --w-regular:         400;
+  --w-medium:          500;
+  --w-semibold:        600;
+  --w-bold:            700;
+
+  /* ── TYPE / TRACKING ─────────────────────────────────────── */
+  --track-tight:       -0.025em;
+  --track-snug:        -0.01em;
+  --track-wide:        0.05em;
+  --track-uppercase:   0.07em;
+
+  /* ── SPACE / 4px scale ───────────────────────────────────── */
+  --s-1:               4px;
+  --s-2:               8px;
+  --s-3:               12px;
+  --s-4:               16px;
+  --s-5:               20px;
+  --s-6:               24px;
+  --s-8:               32px;
+  --s-10:              40px;
+  --s-12:              48px;
+  --s-16:              64px;
+  --s-20:              80px;
+
+  /* ── RADIUS ──────────────────────────────────────────────── */
+  --r-xs:              7px;        /* bottom discount badge */
+  --r-sm:              9px;        /* corner badge */
+  --r-md:              14px;       /* deal card */
+  --r-lg:              16px;       /* large card / note */
+  --r-xl:              20px;       /* store card / hero */
+  --r-pill:            9999px;     /* chips, buttons, pills */
+
+  /* ── SHADOW ──────────────────────────────────────────────── */
+  --shadow-card:       0 1px 4px rgba(15, 23, 42, 0.06);
+  --shadow-card-hover: 0 8px 28px rgba(15, 23, 42, 0.13);
+  --shadow-featured:   0 4px 20px rgba(30, 107, 60, 0.10);
+  --shadow-header:     0 2px 24px rgba(15, 23, 42, 0.09);
+  --shadow-popover:    0 12px 32px rgba(15, 23, 42, 0.10);
+  --shadow-cta-glow:   0 4px 16px rgba(30, 107, 60, 0.28);
+
+  /* ── MOTION / DURATION ───────────────────────────────────── */
+  --dur-fast:          120ms;      /* micro press */
+  --dur-base:          180ms;      /* hover, color */
+  --dur-mid:           320ms;      /* page enter */
+  --dur-card:          1000ms;     /* deal card fade-in */
+  --stagger-card:      175ms;      /* per-card stagger */
+  --stagger-hero:      150ms;      /* per-hero-item stagger */
+
+  /* ── MOTION / EASING ─────────────────────────────────────── */
+  --ease-spring:       cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out:          cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:           cubic-bezier(0.4, 0, 1, 1);
+  --ease-smooth:       cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-gentle:       cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* ── LAYOUT ──────────────────────────────────────────────── */
+  --layout-max:        1200px;     /* page max-width */
+  --layout-pad:        2.5rem;     /* desktop side padding */
+  --layout-pad-mobile: 1.25rem;
+  --header-height:     64px;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Logo } from '../ds/Logo'
 
 const navLinks = [
   { label: 'Home', to: '/' },
@@ -13,143 +14,138 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
+    const onScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        height: '68px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 2rem',
-        transition: 'background 0.3s, border-color 0.3s, box-shadow 0.3s',
-        background: scrolled ? 'rgba(20,20,20,0.94)' : '#1a1a1a',
-        backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-        borderBottom: '1px solid rgba(255,255,255,0.14)',
-        boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.7)' : '0 2px 12px rgba(0,0,0,0.5)',
-      }}
-    >
-      {/* Logo */}
-      <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-        <span style={{ fontSize: '1.25rem' }}>🌿</span>
-        <span style={{
-          fontSize: '1.25rem',
-          fontWeight: 800,
-          letterSpacing: '-0.03em',
-          background: 'linear-gradient(135deg, #ffffff 30%, #22c55e)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}>
-          SuperDeal
-        </span>
-        <span style={{
-          fontSize: '0.65rem',
-          fontWeight: 600,
-          letterSpacing: '0.12em',
-          color: '#fbbf24',
-          textTransform: 'uppercase',
-          marginTop: '2px',
-        }}>NL</span>
-      </Link>
-
-      {/* Desktop nav */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-        {navLinks.map(({ label, to }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={to === '/'}
-            style={({ isActive }) => ({
-              padding: '0.375rem 0.875rem',
-              borderRadius: '9999px',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-              textDecoration: 'none',
-              transition: 'background 0.2s, color 0.2s',
-              color: isActive ? '#22c55e' : '#666666',
-              background: isActive ? 'rgba(34,197,94,0.1)' : 'transparent',
-            })}
-          >
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Mobile hamburger */}
-      <button
-        onClick={() => setMenuOpen(o => !o)}
-        aria-label="Toggle menu"
+    <>
+      <header
         style={{
-          display: 'none',
-          flexDirection: 'column',
-          gap: '5px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          padding: '4px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          height: 'var(--header-height)',
+          background: 'var(--c-bg)',
+          borderBottom: '1px solid var(--c-border)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 var(--layout-pad)',
+          gap: '1.25rem',
+          transition: 'box-shadow 0.25s',
+          boxShadow: scrolled ? 'var(--shadow-header)' : 'none',
         }}
-        className="mobile-menu-btn"
       >
-        {[0, 1, 2].map(i => (
-          <span key={i} style={{ display: 'block', width: '22px', height: '2px', background: '#ffffff', borderRadius: '2px' }} />
-        ))}
-      </button>
+        <Link to="/" style={{ flexShrink: 0 }}>
+          <Logo />
+        </Link>
 
-      {/* Mobile dropdown */}
+        <nav className="hidden md:flex" style={{ alignItems: 'center', gap: '0.2rem', flexShrink: 0, marginLeft: 'auto' }}>
+          {navLinks.map(({ label, to }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/'}
+              style={({ isActive }) => ({
+                padding: '0.35rem 0.85rem',
+                borderRadius: 'var(--r-pill)',
+                fontSize: '0.82rem',
+                fontWeight: isActive ? 600 : 500,
+                transition: 'background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out)',
+                color: isActive ? 'var(--c-brand)' : 'var(--c-text-muted)',
+                background: isActive ? 'var(--c-brand-bg)' : 'transparent',
+              })}
+            >
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Hamburger */}
+        <button
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Menu"
+          aria-expanded={menuOpen}
+          className="flex md:hidden"
+          style={{
+            width: 36,
+            height: 36,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 8,
+            background: 'transparent',
+            border: '1.5px solid var(--c-border-strong)',
+            flexDirection: 'column',
+            gap: 5,
+            padding: 0,
+            flexShrink: 0,
+          }}
+        >
+          {[0, 1, 2].map(i => (
+            <motion.span
+              key={i}
+              animate={
+                menuOpen
+                  ? i === 0
+                    ? { translateY: 6.5, rotate: 45 }
+                    : i === 1
+                    ? { opacity: 0, scaleX: 0 }
+                    : { translateY: -6.5, rotate: -45 }
+                  : { translateY: 0, rotate: 0, opacity: 1, scaleX: 1 }
+              }
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              style={{ display: 'block', width: 16, height: 1.5, background: 'var(--c-text-muted)', borderRadius: 2, transformOrigin: 'center' }}
+            />
+          ))}
+        </button>
+      </header>
+
+      {/* Mobile nav dropdown */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <motion.nav
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
             style={{
-              position: 'absolute',
-              top: '68px',
+              display: 'block',
+              position: 'fixed',
+              top: 'var(--header-height)',
               left: 0,
               right: 0,
-              background: 'rgba(20,20,20,0.98)',
-              backdropFilter: 'blur(20px)',
-              borderBottom: '1px solid rgba(255,255,255,0.08)',
-              padding: '1rem 2rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.5rem',
+              background: 'var(--c-bg)',
+              borderBottom: '1px solid var(--c-border)',
+              padding: '1.25rem 1.5rem 1.5rem',
+              zIndex: 99,
+              boxShadow: 'var(--shadow-popover)',
             }}
           >
-            {navLinks.map(({ label, to }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={to === '/'}
-                onClick={() => setMenuOpen(false)}
-                style={({ isActive }) => ({
-                  padding: '0.75rem 0',
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                  color: isActive ? '#22c55e' : '#ffffff',
-                  borderBottom: '1px solid rgba(255,255,255,0.06)',
-                })}
-              >
-                {label}
-              </NavLink>
-            ))}
-          </motion.div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+              {navLinks.map(({ label, to }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  end={to === '/'}
+                  onClick={() => setMenuOpen(false)}
+                  style={({ isActive }) => ({
+                    padding: '0.7rem 0.9rem',
+                    borderRadius: 10,
+                    fontSize: '0.9rem',
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? 'var(--c-brand)' : 'var(--c-text-muted)',
+                    background: isActive ? 'var(--c-brand-bg)' : 'transparent',
+                  })}
+                >
+                  {label}
+                </NavLink>
+              ))}
+            </div>
+          </motion.nav>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   )
 }

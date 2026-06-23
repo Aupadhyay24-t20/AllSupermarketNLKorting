@@ -58,8 +58,7 @@ def extract_discount_pct(discount_text):
     return float(match.group(1)) if match else None
 
 files = [
-    ('../data/J_cleaned_7.json', '2026-06-17'),
-    ('../data/AH_cleaned_8.json', '2026-06-15')
+    ('../data/AH_cleaned_9.json', '2026-06-22')
 ]
 
 total = 0

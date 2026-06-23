@@ -1,24 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap');
+@import "./styles/fresco-tokens.css";
 @import "tailwindcss";
-
-:root {
-  --bg:        #090909;
-  --surface:   rgba(255,255,255,0.04);
-  --surface-2: rgba(255,255,255,0.08);
-  --border:    rgba(255,255,255,0.09);
-  --border-2:  rgba(255,255,255,0.16);
-  --accent:    #22c55e;
-  --accent-dim:#16a34a;
-  --warm:      #fbbf24;
-  --text-1:    #ffffff;
-  --text-2:    #666666;
-  --text-3:    #444444;
-  --radius-card: 16px;
-  --radius-pill: 9999px;
-
-  font-family: 'Inter', system-ui, sans-serif;
-  font-optical-sizing: auto;
-}
 
 *, *::before, *::after {
   margin: 0;
@@ -29,29 +10,21 @@
 html { font-size: 16px; scroll-behavior: smooth; }
 
 body {
-  background-color: var(--bg);
-  color: var(--text-1);
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* glass utility */
-.glass {
-  background: var(--surface);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid var(--border);
-}
-
-.glass-2 {
-  background: var(--surface-2);
-  backdrop-filter: blur(20px) saturate(200%);
-  -webkit-backdrop-filter: blur(20px) saturate(200%);
-  border: 1px solid var(--border-2);
-}
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); font-weight: 400; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: var(--font-sans); }
+img { display: block; }
 
 /* custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+::-webkit-scrollbar-thumb { background: var(--c-border-strong); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c-text-subtle); }
