@@ -1,0 +1,6 @@
+selenium==4.43.0
+pandas==3.0.2
+supabase==2.30.0
+python-dotenv==1.2.2
+requests==2.33.1
+numpy==2.4.4

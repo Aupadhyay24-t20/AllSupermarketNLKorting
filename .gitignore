@@ -9,3 +9,8 @@ __pycache__/
 *.pyc
 CLAUDE.md
 .gstack/
+
+# scraped data — never commit raw/cleaned JSON
+data/raw/
+data/*.json
+src/scraping/*.json

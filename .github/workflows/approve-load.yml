@@ -1,0 +1,51 @@
+name: Approve Load
+
+on:
+  workflow_dispatch:
+    inputs:
+      store:
+        description: 'Store to load (ah or jumbo)'
+        required: true
+        type: choice
+        options: [ah, jumbo]
+      run_id:
+        description: 'Run ID of the halted scrape workflow (from the anomaly email)'
+        required: true
+      week:
+        description: 'week_scraped date (YYYY-MM-DD, defaults to today)'
+        required: false
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download held artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pipeline-hold-${{ inputs.store }}-${{ inputs.run_id }}
+          path: data/raw/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.run_id }}
+
+      - name: Find cleaned file and load to Supabase
+        run: |
+          CLEANED_FILE=$(ls data/raw/${{ inputs.store }}_*_cleaned.json | head -1)
+          WEEK="${{ inputs.week }}"
+          if [ -z "$WEEK" ]; then
+            WEEK=$(date +%Y-%m-%d)
+          fi
+          echo "Loading: $CLEANED_FILE for week $WEEK"
+          python -m src.pipeline.approve_load --file "$CLEANED_FILE" --week "$WEEK"
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}

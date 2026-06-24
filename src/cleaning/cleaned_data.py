@@ -5,13 +5,11 @@ from supabase import create_client
 from dotenv import load_dotenv
 
 load_dotenv()
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print(f"Working directory: {os.getcwd()}")
+
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
 
 store_cache = {}
 discount_type_cache = {}
@@ -57,12 +55,8 @@ def extract_discount_pct(discount_text):
     match = re.search(r'(\d+)%', discount_text)
     return float(match.group(1)) if match else None
 
-files = [
-    ('../data/AH_cleaned_9.json', '2026-06-22')
-]
 
-total = 0
-for filepath, week in files:
+def load_to_supabase(filepath: str, week: str) -> int:
     with open(filepath, encoding='utf-8') as f:
         deals = json.load(f)
 
@@ -84,7 +78,18 @@ for filepath, week in files:
         })
 
     supabase.table('deals').insert(rows).execute()
-    total += len(rows)
+    return len(rows)
 
 
-print(f"\n Done! Inserted {total} deals total.")
+if __name__ == '__main__':
+    _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    files = [
+        (os.path.join(_REPO_ROOT, 'data', 'J_cleaned_8.json'), '2026-06-24'),
+    ]
+
+    total = 0
+    for filepath, week in files:
+        total += load_to_supabase(filepath, week)
+
+    print(f"\nDone! Inserted {total} deals total.")

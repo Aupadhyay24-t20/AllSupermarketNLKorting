@@ -1,0 +1,66 @@
+name: Scrape AH
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'  # Monday 07:00 UTC = 08:00 NL (winter CET); 09:00 NL in summer (CEST) — AH refreshes Mondays
+  workflow_dispatch:       # also triggerable manually from GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: browser-actions/setup-chrome@latest
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        id: pipeline
+        run: |
+          set +e
+          python -m src.pipeline.run_pipeline --store ah
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+
+      - name: Upload held data artifact
+        if: steps.pipeline.outputs.exit_code == '42'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-hold-ah-${{ github.run_id }}
+          path: data/raw/
+
+      - name: Send anomaly email
+        if: steps.pipeline.outputs.exit_code == '42'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          to: aditya141105@gmail.com
+          from: ${{ secrets.GMAIL_USERNAME }}
+          subject: "[AH Pipeline] Anomaly detected — run ${{ github.run_id }}"
+          body: |
+            The AH scrape pipeline detected anomalies and halted before inserting to Supabase.
+
+            Run ID: ${{ github.run_id }}
+            View run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            The cleaned data and anomaly report are attached as artifact: pipeline-hold-ah-${{ github.run_id }}
+
+            To load the held data after reviewing, trigger the "Approve Load" workflow with:
+              store: ah
+              run_id: ${{ github.run_id }}
+
+      - name: Fail if unexpected error (not anomaly halt)
+        if: steps.pipeline.outputs.exit_code != '0' && steps.pipeline.outputs.exit_code != '42'
+        run: exit 1
