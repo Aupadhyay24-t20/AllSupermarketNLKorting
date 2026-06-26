@@ -28,3 +28,34 @@ img { display: block; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--c-border-strong); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--c-text-subtle); }
+
+/* ── Responsive layout tokens ── */
+:root {
+  --pad-hero:       5.5rem 0 4rem;
+  --pad-section:    4rem 0;
+  --pad-section-lg: 4.5rem 0;
+  --pad-section-sm: 3rem 0;
+  --grid-deal-min:  185px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --layout-pad:     1rem;
+    --header-height:  56px;
+    --pad-hero:       2.75rem 0 2rem;
+    --pad-section:    2rem 0;
+    --pad-section-lg: 2.5rem 0;
+    --pad-section-sm: 1.75rem 0;
+    --grid-deal-min:  150px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --layout-pad:     1.75rem;
+    --pad-hero:       4rem 0 3rem;
+    --pad-section:    3rem 0;
+    --pad-section-lg: 3.5rem 0;
+    --pad-section-sm: 2.25rem 0;
+  }
+}

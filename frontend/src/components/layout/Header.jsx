@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { Logo } from '../ds/Logo'
-
-const navLinks = [
-  { label: 'Home', to: '/' },
-  { label: 'Aanbiedingen', to: '/aanbiedingen' },
-  { label: 'Over Ons', to: '/over-ons' },
-]
+import { LanguageSwitcher } from '../ds/LanguageSwitcher'
 
 export default function Header() {
+  const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const navLinks = [
+    { label: t('nav.home'), to: '/' },
+    { label: t('nav.deals'), to: '/aanbiedingen' },
+    { label: t('nav.about'), to: '/over-ons' },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -62,6 +65,8 @@ export default function Header() {
             </NavLink>
           ))}
         </nav>
+
+        <LanguageSwitcher />
 
         {/* Hamburger */}
         <button
@@ -119,7 +124,7 @@ export default function Header() {
               background: 'var(--c-bg)',
               borderBottom: '1px solid var(--c-border)',
               padding: '1.25rem 1.5rem 1.5rem',
-              zIndex: 99,
+              zIndex: 150,
               boxShadow: 'var(--shadow-popover)',
             }}
           >

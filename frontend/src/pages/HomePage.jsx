@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import Layout from '../components/layout/Layout'
 import DealGrid from '../components/deals/DealGrid'
 import { Badge } from '../components/ds/Badge'
 import { Button } from '../components/ds/Button'
+import ahLogo from '../assets/AH-logo.jpg'
+import jumboLogo from '../assets/Jumbo-2.jpg'
 
 const heroVariants = {
   hidden: {},
@@ -17,39 +20,34 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] } },
 }
 
-const STATS = [
-  { value: '500+', label: 'Actieve deals' },
-  { value: '2', label: 'Supermarkten' },
-  { value: 'Gratis', label: 'Altijd & voor iedereen', accent: true },
-]
-
 const STORES = [
   {
+    key: 'ah',
     name: 'Albert Heijn',
-    initials: 'AH',
+    logo: ahLogo,
     color: 'var(--c-ah)',
-    bg: '#eff6ff',
-    border: 'rgba(30,107,60,0.15)',
     hoverBorder: 'rgba(30,107,60,0.3)',
-    desc: 'Alle bonusdeals van AH — van verse groenten tot huishoudproducten. Elke week bijgewerkt.',
-    count: '~120 deals deze week',
     to: '/aanbiedingen?store=Albert+Heijn',
   },
   {
+    key: 'jumbo',
     name: 'Jumbo',
-    initials: 'JUMBO',
+    logo: jumboLogo,
     color: 'var(--c-jumbo)',
-    bg: '#fff5f5',
-    border: 'rgba(220,38,38,0.12)',
     hoverBorder: 'rgba(220,38,38,0.25)',
-    desc: 'Alle weekaanbiedingen van Jumbo — van vers vlees tot zuivel en dranken. Nooit een deal missen.',
-    count: '~107 deals deze week',
     to: '/aanbiedingen?store=Jumbo',
   },
 ]
 
 export default function HomePage() {
+  const { t } = useTranslation()
   const [allDeals, setAllDeals] = useState(undefined)
+
+  const STATS = [
+    { value: '500+', label: t('home.stat_deals_label') },
+    { value: '2', label: t('home.stat_stores_label') },
+    { value: t('home.stat_free_value'), label: t('home.stat_free_label'), accent: true },
+  ]
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/deals/`)
@@ -68,7 +66,7 @@ export default function HomePage() {
       <section
         style={{
           background: 'linear-gradient(160deg,#ffffff 0%,#f2f9f5 50%,#e8f4ec 100%)',
-          padding: '5.5rem 0 4rem',
+          padding: 'var(--pad-hero)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -83,7 +81,7 @@ export default function HomePage() {
           style={{ maxWidth: 'var(--layout-max)', margin: '0 auto', padding: '0 var(--layout-pad)', position: 'relative' }}
         >
           <motion.div variants={fadeUp} style={{ marginBottom: '1.75rem' }}>
-            <Badge>Wekelijks bijgewerkt · Altijd gratis</Badge>
+            <Badge>{t('home.badge')}</Badge>
           </motion.div>
 
           <motion.h1
@@ -98,18 +96,21 @@ export default function HomePage() {
               maxWidth: 640,
             }}
           >
-            Verse deals
+            {t('home.h1_line1')}
             <br />
-            <em style={{ color: 'var(--c-brand)', fontStyle: 'italic' }}>van AH &amp; Jumbo.</em>
+            <em style={{ color: 'var(--c-brand)', fontStyle: 'italic' }}>{t('home.h1_line2')}</em>
           </motion.h1>
 
-          <motion.p variants={fadeUp} style={{ margin: 0, fontSize: '1rem', color: 'var(--c-text-muted)', lineHeight: 1.8, maxWidth: 440, marginBottom: '2.25rem' }}>
-            Alle supermarkt aanbiedingen op één plek. Bespaar elke week zonder moeite — voor iedereen, altijd gratis.
+          <motion.p variants={fadeUp} style={{ margin: 0, fontSize: '1rem', color: 'var(--c-text-muted)', lineHeight: 1.8, maxWidth: 440, marginBottom: '0.6rem' }}>
+            {t('home.desc')}
+          </motion.p>
+          <motion.p variants={fadeUp} style={{ margin: 0, fontSize: '0.78rem', color: 'var(--c-text-subtle)', marginBottom: '2.25rem' }}>
+            {t('deals.store_notice')}
           </motion.p>
 
           <motion.div variants={fadeUp} style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
-            <Link to="/aanbiedingen"><Button variant="ghost" size="lg">Bekijk aanbiedingen →</Button></Link>
-            <Link to="/over-ons"><Button variant="ghost" size="lg">Hoe werkt het?</Button></Link>
+            <Link to="/aanbiedingen"><Button variant="ghost" size="lg">{t('home.btn_deals')}</Button></Link>
+            <Link to="/over-ons"><Button variant="ghost" size="lg">{t('home.btn_about')}</Button></Link>
           </motion.div>
 
           <motion.div
@@ -127,25 +128,25 @@ export default function HomePage() {
       </section>
 
       {/* ── Featured deals ── */}
-      <section style={{ padding: '4rem 0' }}>
+      <section style={{ padding: 'var(--pad-section)' }}>
         <div style={{ maxWidth: 'var(--layout-max)', margin: '0 auto', padding: '0 var(--layout-pad)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '0.75rem' }}>
             <div>
-              <h2 style={{ margin: 0, fontSize: '1.75rem', letterSpacing: '-0.01em', color: 'var(--c-text)' }}>Beste deals deze week</h2>
-              <p style={{ margin: '3px 0 0', fontSize: '0.8rem', color: 'var(--c-text-subtle)' }}>Wekelijks vernieuwd van AH &amp; Jumbo</p>
+              <h2 style={{ margin: 0, fontSize: '1.75rem', letterSpacing: '-0.01em', color: 'var(--c-text)' }}>{t('home.featured_title')}</h2>
+              <p style={{ margin: '3px 0 0', fontSize: '0.8rem', color: 'var(--c-text-subtle)' }}>{t('home.featured_sub')}</p>
             </div>
-            <Link to="/aanbiedingen"><Button variant="secondary" size="sm">Alle aanbiedingen →</Button></Link>
+            <Link to="/aanbiedingen"><Button variant="secondary" size="sm">{t('home.all_deals_btn')}</Button></Link>
           </div>
           <DealGrid deals={allDeals} limit={8} featureFirst />
         </div>
       </section>
 
       {/* ── Store section ── */}
-      <section style={{ padding: '4rem 0', background: 'var(--c-bg)', borderTop: '1px solid var(--c-border)' }}>
+      <section style={{ padding: 'var(--pad-section)', background: 'var(--c-bg)', borderTop: '1px solid var(--c-border)' }}>
         <div style={{ maxWidth: 'var(--layout-max)', margin: '0 auto', padding: '0 var(--layout-pad)' }}>
-          <h2 style={{ margin: 0, fontSize: '1.75rem', letterSpacing: '-0.01em', color: 'var(--c-text)', marginBottom: '0.4rem' }}>Onze supermarkten</h2>
+          <h2 style={{ margin: 0, fontSize: '1.75rem', letterSpacing: '-0.01em', color: 'var(--c-text)', marginBottom: '0.4rem' }}>{t('home.stores_title')}</h2>
           <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--c-text-subtle)', marginBottom: '2.25rem' }}>
-            Deals van twee van de grootste supermarkten in Nederland
+            {t('home.stores_sub')}
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
             {STORES.map(s => (
@@ -172,14 +173,14 @@ export default function HomePage() {
                   e.currentTarget.style.boxShadow = 'none'
                 }}
               >
-                <div style={{ width: 48, height: 48, borderRadius: 12, background: s.bg, border: `1px solid ${s.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <span style={{ fontSize: s.initials.length > 2 ? '0.65rem' : '0.75rem', fontWeight: 800, color: s.color, letterSpacing: '-0.02em' }}>{s.initials}</span>
+                <div style={{ width: 72, height: 72, borderRadius: 16, overflow: 'hidden', marginBottom: '1.25rem', border: '1px solid var(--c-border)' }}>
+                  <img src={s.logo} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <h3 style={{ margin: 0, fontSize: '1.25rem', color: 'var(--c-text)', marginBottom: '0.4rem' }}>{s.name}</h3>
-                <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--c-text-muted)', lineHeight: 1.65, marginBottom: '1.5rem' }}>{s.desc}</p>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--c-text-muted)', lineHeight: 1.65, marginBottom: '1.5rem' }}>{t(`home.${s.key}_desc`)}</p>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--c-text-subtle)' }}>{s.count}</span>
-                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: s.color }}>Bekijk deals →</span>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--c-text-subtle)' }}>{t(`home.${s.key}_count`)}</span>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: s.color }}>{t('home.view_deals')}</span>
                 </div>
               </Link>
             ))}

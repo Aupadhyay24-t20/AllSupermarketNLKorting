@@ -13,7 +13,7 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
 }
 
-const gridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(185px, 1fr))', gap: '1rem' }
+const gridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(var(--grid-deal-min), 1fr))', gap: '1rem' }
 
 function SkeletonCard() {
   return (

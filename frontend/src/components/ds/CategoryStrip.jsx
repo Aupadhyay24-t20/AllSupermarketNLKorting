@@ -1,12 +1,10 @@
-const CATS = ['Alles', 'Groenten & Fruit', 'Vlees & Vis', 'Zuivel', 'Dranken', 'Snacks & Koek', 'Huishouden', 'Diepvries']
+import { useTranslation } from 'react-i18next'
 
-/**
- * Sticky category filter strip — ported verbatim from the Fresco prototype.
- * Real deals carry no category field, so picking anything but "Alles"
- * naturally yields zero results; that's the literal prototype behavior,
- * not a bug to special-case.
- */
+const CAT_KEYS = ['all', 'groenten', 'vlees', 'zuivel', 'dranken', 'snacks', 'huishouden', 'diepvries']
+
 export function CategoryStrip({ active, onChange }) {
+  const { t } = useTranslation()
+
   return (
     <div
       style={{
@@ -29,13 +27,13 @@ export function CategoryStrip({ active, onChange }) {
         }}
       >
         <div style={{ display: 'flex', gap: '0.45rem', width: 'max-content', margin: '0 auto' }}>
-          {CATS.map(c => {
-            const isActive = c === active
+          {CAT_KEYS.map(key => {
+            const isActive = key === active
             return (
               <button
-                key={c}
+                key={key}
                 type="button"
-                onClick={() => onChange(c)}
+                onClick={() => onChange(key)}
                 style={{
                   padding: '7px 17px',
                   borderRadius: 'var(--r-pill)',
@@ -50,7 +48,7 @@ export function CategoryStrip({ active, onChange }) {
                   boxShadow: isActive ? '0 2px 8px rgba(30,107,60,0.22)' : 'none',
                 }}
               >
-                {c}
+                {t(`cats.${key}`)}
               </button>
             )
           })}
