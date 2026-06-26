@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "home": "Home",
+    "deals": "Aanbiedingen",
+    "about": "Over Ons"
+  },
+  "home": {
+    "badge": "Wekelijks bijgewerkt · Altijd gratis",
+    "h1_line1": "Verse deals",
+    "h1_line2": "van AH & Jumbo.",
+    "desc": "Alle supermarkt aanbiedingen op één plek. Bespaar elke week op je boodschappen, voor iedereen en altijd gratis.",
+    "btn_deals": "Bekijk aanbiedingen →",
+    "btn_about": "Hoe werkt het?",
+    "stat_deals_label": "Actieve deals",
+    "stat_stores_label": "Supermarkten",
+    "stat_free_value": "Gratis",
+    "stat_free_label": "Altijd & voor iedereen",
+    "featured_title": "Beste deals deze week",
+    "featured_sub": "Wekelijks vernieuwd van AH & Jumbo",
+    "all_deals_btn": "Alle aanbiedingen →",
+    "stores_title": "Onze supermarkten",
+    "stores_sub": "Deals van twee van de grootste supermarkten in Nederland",
+    "ah_desc": "Alle bonusdeals van AH, van verse groenten tot huishoudproducten. Elke week nieuwe deals.",
+    "ah_count": "~120 deals deze week",
+    "jumbo_desc": "Alle weekaanbiedingen van Jumbo, van vers vlees tot zuivel en dranken. Elke week bijgewerkt.",
+    "jumbo_count": "~107 deals deze week",
+    "view_deals": "Bekijk deals →"
+  },
+  "deals": {
+    "page_title": "Aanbiedingen — Fresco",
+    "title": "Alle Aanbiedingen",
+    "subtitle": "Bekijk alle deals van AH en Jumbo",
+    "cat_subtitle": "{{count}} deals in {{cat}}",
+    "all_stores": "Alle supermarkten",
+    "count": "{{count}} deals",
+    "store_notice": "Alleen winkelaanbiedingen. Online bezorgdeals zijn niet inbegrepen."
+  },
+  "cats": {
+    "all": "Alles",
+    "groenten": "Groenten & Fruit",
+    "vlees": "Vlees & Vis",
+    "zuivel": "Zuivel",
+    "dranken": "Dranken",
+    "snacks": "Snacks & Koek",
+    "huishouden": "Huishouden",
+    "diepvries": "Diepvries"
+  },
+  "about": {
+    "page_title": "Over Ons — Fresco",
+    "badge": "Over Fresco",
+    "h1": "Verse deals,",
+    "h1_accent": "elke week.",
+    "desc": "Fresco is een onafhankelijk platform dat wekelijks alle supermarkt aanbiedingen van Albert Heijn en Jumbo op één plek verzamelt. Geen registratie, geen kosten. Gewoon de beste deals, elke week opnieuw.",
+    "pillar1_title": "Wekelijks bijgewerkt",
+    "pillar1_body": "Elke week worden de nieuwe aanbiedingen van AH en Jumbo verzameld en gepubliceerd. Elke week up-to-date.",
+    "pillar2_title": "Altijd gratis",
+    "pillar2_body": "Fresco is en blijft gratis voor iedereen. Geen account, geen abonnement. Gewoon de beste deals bekijken.",
+    "pillar3_title": "Alle supermarkten op één plek",
+    "pillar3_body": "Vergelijk deals van Albert Heijn en Jumbo naast elkaar en kies zelf waar je het meeste uitkomt.",
+    "how_title": "Hoe werkt Fresco?",
+    "how_sub": "In drie stappen naar de beste deals van de week",
+    "step1_title": "Zoek of blader",
+    "step1_body": "Gebruik de zoekbalk of filter op winkel om de deals te vinden die jij nodig hebt.",
+    "step2_title": "Vergelijk en kies",
+    "step2_body": "Bekijk de aanbiedingen van AH en Jumbo naast elkaar en kijk waar jij het meeste uitkomt.",
+    "step3_title": "Ga naar de winkel",
+    "step3_body": "Klik op 'Bekijk deal' om direct naar de aanbieding op de site van AH of Jumbo te gaan.",
+    "disclaimer_title": "Let op",
+    "disclaimer_body": "Fresco toont alleen aanbiedingen die geldig zijn in de fysieke winkel. Online bezorgdeals zijn niet inbegrepen. Prijzen kunnen afwijken, check altijd de website of app van de supermarkt voor de meest actuele informatie."
+  },
+  "footer": {
+    "tagline": "Alle supermarkt aanbiedingen op één plek.",
+    "nav_label": "Navigatie",
+    "stores_label": "Supermarkten",
+    "disclaimer": "Alleen winkelaanbiedingen. Prijzen kunnen afwijken."
+  },
+  "lang": {
+    "nl": "Nederlands",
+    "en": "English"
+  }
+}

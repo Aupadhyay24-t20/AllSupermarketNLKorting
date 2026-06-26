@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "home": "Home",
+    "deals": "Deals",
+    "about": "About Us"
+  },
+  "home": {
+    "badge": "Weekly updated · Always free",
+    "h1_line1": "Fresh deals",
+    "h1_line2": "from AH & Jumbo.",
+    "desc": "All supermarket deals in one place. Save on your groceries every week, free for everyone.",
+    "btn_deals": "View deals →",
+    "btn_about": "How does it work?",
+    "stat_deals_label": "Active deals",
+    "stat_stores_label": "Supermarkets",
+    "stat_free_value": "Free",
+    "stat_free_label": "Always & for everyone",
+    "featured_title": "Best deals this week",
+    "featured_sub": "Weekly updated from AH & Jumbo",
+    "all_deals_btn": "All deals →",
+    "stores_title": "Our supermarkets",
+    "stores_sub": "Deals from two of the largest supermarkets in the Netherlands",
+    "ah_desc": "All bonus deals from AH, from fresh vegetables to household products. New deals every week.",
+    "ah_count": "~120 deals this week",
+    "jumbo_desc": "All weekly deals from Jumbo, from fresh meat to dairy and drinks. Updated every week.",
+    "jumbo_count": "~107 deals this week",
+    "view_deals": "View deals →"
+  },
+  "deals": {
+    "page_title": "Deals — Fresco",
+    "title": "All Deals",
+    "subtitle": "View all deals from AH and Jumbo",
+    "cat_subtitle": "{{count}} deals in {{cat}}",
+    "all_stores": "All supermarkets",
+    "count": "{{count}} deals",
+    "store_notice": "In-store deals only. Online delivery deals are not included."
+  },
+  "cats": {
+    "all": "All",
+    "groenten": "Vegetables & Fruit",
+    "vlees": "Meat & Fish",
+    "zuivel": "Dairy",
+    "dranken": "Drinks",
+    "snacks": "Snacks & Cookies",
+    "huishouden": "Household",
+    "diepvries": "Frozen"
+  },
+  "about": {
+    "page_title": "About Us — Fresco",
+    "badge": "About Fresco",
+    "h1": "Fresh deals,",
+    "h1_accent": "every week.",
+    "desc": "Fresco is an independent platform that collects all supermarket deals from Albert Heijn and Jumbo in one place every week. No registration, no costs. Just the best deals, week after week.",
+    "pillar1_title": "Weekly updated",
+    "pillar1_body": "Every week, the new deals from AH and Jumbo are collected and published. Always up to date.",
+    "pillar2_title": "Always free",
+    "pillar2_body": "Fresco is and stays free for everyone. No account, no subscription. Just browse and save.",
+    "pillar3_title": "All supermarkets in one place",
+    "pillar3_body": "Compare deals from Albert Heijn and Jumbo side by side and pick what works best for you.",
+    "how_title": "How does Fresco work?",
+    "how_sub": "Three steps to the best deals of the week",
+    "step1_title": "Search or browse",
+    "step1_body": "Use the search bar or filter by store to find the deals you need.",
+    "step2_title": "Compare and choose",
+    "step2_body": "View deals from AH and Jumbo side by side and see where you save the most.",
+    "step3_title": "Go to the store",
+    "step3_body": "Click 'View deal' to go straight to the offer on the AH or Jumbo website.",
+    "disclaimer_title": "Good to know",
+    "disclaimer_body": "Fresco only shows deals valid in physical stores. Online delivery deals are not included. Prices may vary, so always check the supermarket website or app for the latest information."
+  },
+  "footer": {
+    "tagline": "All supermarket deals in one place.",
+    "nav_label": "Navigation",
+    "stores_label": "Supermarkets",
+    "disclaimer": "In-store deals only. Prices may vary."
+  },
+  "lang": {
+    "nl": "Nederlands",
+    "en": "English"
+  }
+}
