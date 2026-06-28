@@ -5,6 +5,7 @@
     "about": "About Us"
   },
   "home": {
+    "page_title": "Fresco | Fresh deals from AH & Jumbo",
     "badge": "Weekly updated · Always free",
     "h1_line1": "Fresh deals",
     "h1_line2": "from AH & Jumbo.",
@@ -26,14 +27,18 @@
     "jumbo_count": "~107 deals this week",
     "view_deals": "View deals →"
   },
+  "search": {
+    "placeholder": "Search products, e.g. cheese or chicken..."
+  },
   "deals": {
-    "page_title": "Deals — Fresco",
+    "page_title": "Deals | Fresco",
     "title": "All Deals",
     "subtitle": "View all deals from AH and Jumbo",
     "cat_subtitle": "{{count}} deals in {{cat}}",
     "all_stores": "All supermarkets",
     "count": "{{count}} deals",
-    "store_notice": "In-store deals only. Online delivery deals are not included."
+    "store_notice": "In-store deals only. Online delivery deals are not included.",
+    "no_results": "No results for \"{{query}}\""
   },
   "cats": {
     "all": "All",
@@ -46,7 +51,7 @@
     "diepvries": "Frozen"
   },
   "about": {
-    "page_title": "About Us — Fresco",
+    "page_title": "About Us | Fresco",
     "badge": "About Fresco",
     "h1": "Fresh deals,",
     "h1_accent": "every week.",
@@ -72,7 +77,22 @@
     "tagline": "All supermarket deals in one place.",
     "nav_label": "Navigation",
     "stores_label": "Supermarkets",
+    "cookies": "Cookie Policy",
     "disclaimer": "In-store deals only. Prices may vary."
+  },
+  "cookie": {
+    "title": "We use cookies",
+    "subtitle": "Your choice, your privacy",
+    "text": "We use Google Analytics to anonymously track how the site is used. No personal data, no ads.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "link": "More info",
+    "trust": "No personal data · No ads · Always reversible"
+  },
+  "notfound": {
+    "title": "Page not found",
+    "desc": "This page doesn't exist or has been moved.",
+    "btn": "Back to home"
   },
   "lang": {
     "nl": "Nederlands",

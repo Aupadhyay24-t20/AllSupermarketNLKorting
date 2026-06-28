@@ -99,12 +99,19 @@ function parseDiscount(discount_raw) {
   return { other: raw }
 }
 
+function formatEndDate(dateStr) {
+  if (!dateStr) return null
+  const d = new Date(dateStr + 'T00:00:00')
+  if (isNaN(d.getTime())) return dateStr
+  return new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short' }).format(d)
+}
+
 export function mapDealToCardProps(deal) {
   return {
     product: deal.product,
     imageUrl: deal.image_url,
     store: normalizeStoreName(deal.stores?.name),
-    endDate: deal.end_date,
+    endDate: formatEndDate(deal.end_date),
     link: deal.link,
     discount: parseDiscount(deal.discount_raw),
   }

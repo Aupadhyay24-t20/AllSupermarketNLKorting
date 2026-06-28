@@ -55,7 +55,12 @@ export default function Footer() {
 
       <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--c-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
         <span style={{ fontSize: '0.73rem', color: 'var(--c-text-subtle)' }}>© 2026 Fresco</span>
-        <span style={{ fontSize: '0.73rem', color: 'var(--c-text-subtle)' }}>{t('footer.disclaimer')}</span>
+        <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+          <Link to="/cookies" style={{ fontSize: '0.73rem', color: 'var(--c-text-subtle)' }}>
+            {t('footer.cookies')}
+          </Link>
+          <span style={{ fontSize: '0.73rem', color: 'var(--c-text-subtle)' }}>{t('footer.disclaimer')}</span>
+        </div>
       </div>
     </footer>
   )

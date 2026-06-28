@@ -1,8 +1,13 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect } from 'react'
 import HomePage from './pages/HomePage'
 import AanbiedingenPage from './pages/AanbiedingenPage'
 import OverOnsPage from './pages/OverOnsPage'
+import NotFoundPage from './pages/NotFoundPage'
+import CookiePolicyPage from './pages/CookiePolicyPage'
+import { CookieBanner } from './components/ds/CookieBanner'
+import { trackPageView } from './utils/analytics'
 
 const pageTransition = {
   initial: { opacity: 0, y: 16 },
@@ -12,6 +17,11 @@ const pageTransition = {
 
 function AnimatedRoutes() {
   const location = useLocation()
+
+  useEffect(() => {
+    trackPageView(location.pathname + location.search)
+  }, [location])
+
   return (
     <AnimatePresence mode="wait">
       <motion.div key={location.pathname} {...pageTransition}>
@@ -19,6 +29,8 @@ function AnimatedRoutes() {
           <Route path="/" element={<HomePage />} />
           <Route path="/aanbiedingen" element={<AanbiedingenPage />} />
           <Route path="/over-ons" element={<OverOnsPage />} />
+          <Route path="/cookies" element={<CookiePolicyPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -29,6 +41,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AnimatedRoutes />
+      <CookieBanner />
     </BrowserRouter>
   )
 }

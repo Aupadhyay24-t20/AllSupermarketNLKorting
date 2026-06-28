@@ -10,6 +10,8 @@ import { EmptyState } from '../components/ds/EmptyState'
 import { SearchInput } from '../components/ds/SearchInput'
 import DealGrid from '../components/deals/DealGrid'
 import { normalizeStoreName } from '../utils/storeName'
+import { expandQuery } from '../utils/searchSynonyms'
+import { trackSearch } from '../utils/analytics'
 
 export default function AanbiedingenPage() {
   const { t } = useTranslation()
@@ -17,6 +19,8 @@ export default function AanbiedingenPage() {
   const [allDeals, setAllDeals] = useState(undefined)
   const [activeStore, setActiveStore] = useState(searchParams.get('store') || 'all')
   const [activeCat, setActiveCat] = useState('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/deals/`)
@@ -25,15 +29,31 @@ export default function AanbiedingenPage() {
       .catch(() => setAllDeals([]))
   }, [])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery)
+      if (searchQuery.trim()) trackSearch(searchQuery.trim())
+    }, 200)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  const searchTerms = expandQuery(debouncedQuery)
+
   const filteredDeals = allDeals === undefined ? undefined : allDeals.filter(deal => {
     if (activeStore !== 'all' && normalizeStoreName(deal.stores?.name) !== activeStore) return false
     if (activeCat !== 'all') return false
+    if (searchTerms.length > 0) {
+      const productLower = (deal.product ?? '').toLowerCase()
+      if (!searchTerms.some(term => productLower.includes(term))) return false
+    }
     return true
   })
 
   const count = filteredDeals?.length ?? 0
   const title = activeCat !== 'all' ? t(`cats.${activeCat}`) : t('deals.title')
-  const subtitle = activeCat !== 'all'
+  const subtitle = debouncedQuery.trim()
+    ? t('deals.count', { count })
+    : activeCat !== 'all'
     ? t('deals.cat_subtitle', { count, cat: t(`cats.${activeCat}`) })
     : t('deals.subtitle')
 
@@ -41,11 +61,18 @@ export default function AanbiedingenPage() {
     <Layout>
       <Helmet>
         <title>{t('deals.page_title')}</title>
+        <meta name="description" content={t('deals.subtitle')} />
+        <meta property="og:title" content={t('deals.page_title')} />
+        <meta property="og:description" content={t('deals.subtitle')} />
       </Helmet>
 
       <div style={{ background: 'var(--c-bg)', borderBottom: '1px solid var(--c-border)', padding: '1.25rem var(--layout-pad)' }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
-          <SearchInput />
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={t('search.placeholder')}
+          />
         </div>
       </div>
 
@@ -80,7 +107,13 @@ export default function AanbiedingenPage() {
         </motion.div>
 
         {filteredDeals !== undefined && filteredDeals.length === 0 ? (
-          <EmptyState />
+          debouncedQuery.trim() ? (
+            <p style={{ textAlign: 'center', padding: '4rem 0', fontSize: '0.875rem', color: 'var(--c-text-subtle)' }}>
+              {t('deals.no_results', { query: debouncedQuery.trim() })}
+            </p>
+          ) : (
+            <EmptyState />
+          )
         ) : (
           <DealGrid deals={filteredDeals} />
         )}

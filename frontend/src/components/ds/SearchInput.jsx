@@ -1,20 +1,18 @@
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 
-/**
- * Header search field — presentational only (matches the Fresco prototype,
- * which ships this input with no event handler).
- */
-export function SearchInput({ placeholder = 'Zoek producten, bijv. kaas of kip...', style }) {
+export function SearchInput({ value = '', onChange, placeholder = 'Zoek producten...', style }) {
   return (
     <div style={{ position: 'relative', ...style }}>
       <Search
         size={15}
         strokeWidth={2}
         aria-hidden
-        style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--c-text-subtle)' }}
+        style={{ position: 'absolute', left: 13, top: '50%', transform: 'translateY(-50%)', color: 'var(--c-text-subtle)', pointerEvents: 'none' }}
       />
       <input
         type="text"
+        value={value}
+        onChange={e => onChange?.(e.target.value)}
         placeholder={placeholder}
         style={{
           width: '100%',
@@ -23,7 +21,7 @@ export function SearchInput({ placeholder = 'Zoek producten, bijv. kaas of kip..
           borderStyle: 'solid',
           borderColor: 'var(--c-border-strong)',
           background: 'var(--c-bg)',
-          padding: '9px 16px 9px 40px',
+          padding: value ? '9px 36px 9px 40px' : '9px 16px 9px 40px',
           fontFamily: 'var(--font-sans)',
           fontSize: '0.82rem',
           color: 'var(--c-text)',
@@ -39,6 +37,31 @@ export function SearchInput({ placeholder = 'Zoek producten, bijv. kaas of kip..
           e.currentTarget.style.boxShadow = 'none'
         }}
       />
+      {value && (
+        <button
+          onClick={() => onChange?.('')}
+          aria-label="Clear search"
+          style={{
+            position: 'absolute',
+            right: 10,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'var(--c-surface-alt)',
+            border: 'none',
+            borderRadius: '50%',
+            width: 18,
+            height: 18,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: 'var(--c-text-subtle)',
+            padding: 0,
+          }}
+        >
+          <X size={11} strokeWidth={2.5} />
+        </button>
+      )}
     </div>
   )
 }

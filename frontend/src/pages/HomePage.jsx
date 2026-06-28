@@ -59,7 +59,10 @@ export default function HomePage() {
   return (
     <Layout>
       <Helmet>
-        <title>Fresco — Verse supermarkt deals</title>
+        <title>{t('home.page_title')}</title>
+        <meta name="description" content={t('home.desc')} />
+        <meta property="og:title" content={t('home.page_title')} />
+        <meta property="og:description" content={t('home.desc')} />
       </Helmet>
 
       {/* ── Hero ── */}

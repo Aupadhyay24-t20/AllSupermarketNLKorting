@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { StoreLogo } from './StoreLogo'
+import { trackDealClick } from '../../utils/analytics'
 
 const STORE_COLORS = { 'Albert Heijn': 'var(--c-ah)', Jumbo: 'var(--c-jumbo)' }
 
@@ -52,7 +53,11 @@ function PriceArea({ discount }) {
  */
 export function DealCard({ product, imageUrl, store, endDate, link, discount, featured = false, style }) {
   const [imgError, setImgError] = useState(false)
-  const open = () => link && window.open(link, '_blank', 'noopener,noreferrer')
+  const open = () => {
+    if (!link) return
+    trackDealClick(product, store)
+    window.open(link, '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <div

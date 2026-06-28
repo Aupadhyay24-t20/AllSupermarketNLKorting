@@ -5,6 +5,7 @@
     "about": "Over Ons"
   },
   "home": {
+    "page_title": "Fresco | Verse deals van AH & Jumbo",
     "badge": "Wekelijks bijgewerkt · Altijd gratis",
     "h1_line1": "Verse deals",
     "h1_line2": "van AH & Jumbo.",
@@ -26,14 +27,18 @@
     "jumbo_count": "~107 deals deze week",
     "view_deals": "Bekijk deals →"
   },
+  "search": {
+    "placeholder": "Zoek producten, bijv. kaas of kip..."
+  },
   "deals": {
-    "page_title": "Aanbiedingen — Fresco",
+    "page_title": "Aanbiedingen | Fresco",
     "title": "Alle Aanbiedingen",
     "subtitle": "Bekijk alle deals van AH en Jumbo",
     "cat_subtitle": "{{count}} deals in {{cat}}",
     "all_stores": "Alle supermarkten",
     "count": "{{count}} deals",
-    "store_notice": "Alleen winkelaanbiedingen. Online bezorgdeals zijn niet inbegrepen."
+    "store_notice": "Alleen winkelaanbiedingen. Online bezorgdeals zijn niet inbegrepen.",
+    "no_results": "Geen resultaten voor \"{{query}}\""
   },
   "cats": {
     "all": "Alles",
@@ -46,7 +51,7 @@
     "diepvries": "Diepvries"
   },
   "about": {
-    "page_title": "Over Ons — Fresco",
+    "page_title": "Over Ons | Fresco",
     "badge": "Over Fresco",
     "h1": "Verse deals,",
     "h1_accent": "elke week.",
@@ -72,7 +77,22 @@
     "tagline": "Alle supermarkt aanbiedingen op één plek.",
     "nav_label": "Navigatie",
     "stores_label": "Supermarkten",
+    "cookies": "Cookiebeleid",
     "disclaimer": "Alleen winkelaanbiedingen. Prijzen kunnen afwijken."
+  },
+  "cookie": {
+    "title": "We gebruiken cookies",
+    "subtitle": "Jouw keuze, jouw privacy",
+    "text": "We gebruiken Google Analytics om anoniem bij te houden hoe de website wordt gebruikt. Geen persoonlijke gegevens, geen advertenties.",
+    "accept": "Accepteren",
+    "decline": "Weigeren",
+    "link": "Meer info",
+    "trust": "Geen persoonsgegevens · Geen advertenties · Altijd intrekbaar"
+  },
+  "notfound": {
+    "title": "Pagina niet gevonden",
+    "desc": "Deze pagina bestaat niet of is verplaatst.",
+    "btn": "Terug naar home"
   },
   "lang": {
     "nl": "Nederlands",

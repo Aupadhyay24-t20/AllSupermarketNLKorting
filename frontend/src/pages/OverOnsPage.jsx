@@ -29,6 +29,9 @@ export default function OverOnsPage() {
     <Layout>
       <Helmet>
         <title>{t('about.page_title')}</title>
+        <meta name="description" content={t('about.desc')} />
+        <meta property="og:title" content={t('about.page_title')} />
+        <meta property="og:description" content={t('about.desc')} />
       </Helmet>
 
       {/* Hero */}
