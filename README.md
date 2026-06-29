@@ -1,91 +1,86 @@
 # SuperDeal NL 🛒
 
-> Track, compare, and understand supermarket deals across the Netherlands — powered by automated data collection and machine learning.
+> Track, compare, and search supermarket deals across the Netherlands powered by automated weekly data collection and machine learning.
 
-SuperDeal NL aggregates weekly in-store discount deals from major Dutch supermarkets (Albert Heijn and Jumbo), stores them in a structured database, and surfaces them through a clean, searchable interface. The project is evolving from a deal aggregator into an intelligent deal intelligence platform — scoring discounts based on historical patterns and predicting when products are likely to go on sale.
+SuperDeal NL aggregates weekly in-store discount deals from Albert Heijn and Jumbo, stores them in a structured database, and surfaces them through a clean, searchable interface. The core value proposition is cross-store product search and comparison, something neither supermarket's own app provides.
 
 ---
 
-## 🚀 Project Status
+## Project Status
 
 | Phase | Description | Status |
 |-------|-------------|--------|
-| Phase 1 | Automated scraping, data cleaning pipeline, and database | ✅ Complete |
-| Phase 2 | Frontend design, UI/UX, and public-facing product | 🔄 In Progress |
-| Phase 3 | ML-powered deal scoring and discount prediction | 📋 Planned |
-| Phase 4 | User accounts, personalised alerts, and recommendations | 📋 Planned |
+| Phase 1 | Scrapers, automated ETL pipeline, anomaly detection, database | Complete |
+| Phase 2 | Frontend (React), REST API, DigitalOcean deployment | Complete |
+| Phase 3 | ML-powered product category classification | In Progress |
+| Phase 4 | Cross-store product matching, user accounts, personalised alerts | Planned |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-### Data Collection & Processing
-- **Python**: core language across the entire stack
-- **Selenium**: browser automation for scraping JavaScript-rendered supermarket pages
-- **Pandas**: data cleaning, transformation, and exploratory analysis
-- **Jupyter Notebooks**: cleaning pipeline and data analysis workflows
+### Data Collection & Pipeline
+- **Python** — core language across the entire stack
+- **Selenium** — browser automation for scraping JavaScript-rendered supermarket pages
+- **Pandas** — data cleaning, transformation, and normalisation
+- **GitHub Actions** — scheduled weekly scraping (AH on Mondays, Jumbo on Wednesdays), anomaly detection, and human approval workflow before database insertion
 
 ### Backend
-- **FastAPI**: REST API serving deal data to the frontend
-- **PostgreSQL / Supabase**: structured relational database storing deals, stores, and discount types
-- **Claude code**: AI-assisted data enrichment and discount categorisation
-- **Gemini**: supporting ML feature development and data analysis
+- **FastAPI** — REST API serving deal data to the frontend
+- **PostgreSQL / Supabase** — relational database storing deals with full weekly history
+- **Uvicorn** — ASGI server
 
 ### Frontend
-- **React**: component-based UI
-- **Tailwind CSS**: utility-first styling for a clean, responsive interface
+- **React 19 + Vite** — component-based UI with fast build tooling
+- **Tailwind CSS** — utility-first styling
+- **React Router** — client-side routing
+- **i18next** — static UI translations (NL/EN)
+
+### Machine Learning
+- **scikit-learn** — TF-IDF vectorisation and Logistic Regression classifier
 
 ---
 
-## ⚙️ How It Works
 
-```
-Scraper → Cleaning Pipeline → Database → API → Frontend
-```
+## How It Works
 
 **1. Scraping**
-Selenium scrapers run weekly against Albert Heijn and Jumbo's promotions pages, capturing in-store deals including product names, discount types, validity dates, and product images. Online-only deals are intentionally excluded to keep the data relevant for in-store shoppers.
+Selenium scrapers run automatically via GitHub Actions on a weekly schedule, AH every Monday, Jumbo every Wednesday. Each run captures in-store deals including product names, discount types, validity dates, and product images. Online-only deals are intentionally excluded.
 
 **2. Cleaning Pipeline**
-Raw scraped data passes through a Pandas-based cleaning pipeline in Jupyter notebooks. This handles Dutch date parsing (e.g. "ma t/m zo"), discount type standardisation (percentage discounts, 2-for-1 deals, combination discounts), and deduplication before database insertion.
+Raw scraped data passes through a Pandas-based cleaning pipeline handling Dutch date parsing, discount type standardisation, and deduplication.
 
-**3. Database**
-Cleaned deals are stored in a PostgreSQL database (hosted on Supabase) with a normalised schema separating deals, stores, and discount types. Every deal is timestamped with its validity window, enabling historical tracking per product over time.
+**3. Anomaly Detection & Approval**
+Before any data reaches the database, the pipeline runs anomaly checks on deal counts, discount magnitudes, and structural integrity. If anomalies are detected, the pipeline halts with a hold signal (exit code 42), uploads the flagged data as a GitHub Actions artifact, and sends an email alert. A separate manual approval workflow (`approve_load.py`) loads the held data after human review.
 
-**4. API**
-A FastAPI backend exposes deal data through a REST API, with endpoints filtering by store, discount type, category, and date range.
+**4. Database**
+Cleaned deals are stored in PostgreSQL (Supabase) with a normalised schema. Every deal is timestamped with its validity window, enabling historical tracking per product over time.
 
-**5. Frontend**
-A React and Tailwind CSS frontend consumes the API, displaying deal cards with product images, discount details, and store information in a clean, searchable interface.
+**5. API**
+A FastAPI backend exposes deal data through a REST API with endpoints filtering by store, discount type, category, and date range.
+
+**6. Frontend**
+A React + Vite frontend consumes the API, displaying deal cards with product images, discount details, and store information in a searchable, cross-store interface.
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 - **Supermarkets covered:** Albert Heijn, Jumbo
 - **Deal types tracked:** Percentage discounts, 2nd product free, combination discounts, fixed price deals
 - **Data scope:** In-store deals only, updated weekly
-- **History:** 6+ weeks of AH data, 4+ weeks of Jumbo data and growing
+- **History:** Multiple weeks of AH and Jumbo data and growing
 
 ---
 
-## 🤖 Machine Learning (Phase 2)
+## Machine Learning (Phase 3)
 
-The ML layer is being designed around three core features:
+Neither Albert Heijn nor Jumbo supply structured category data with their promotions. Product names arrive as raw Dutch strings like "Verse aardappelen", "Alle Lenor wasverzachter", "Combikorting groente" with no taxonomy attached.
 
-**Deal Scoring**
-Score each deal against that product's historical discount baseline — surfacing whether a current discount is better, worse, or average compared to previous appearances.
+The ML layer addresses this with a **supervised text classification pipeline**:
 
-**Discount Categorisation**
-A text classification model trained on discount strings to automatically categorise deal types — handling the wide variety of Dutch promotional formats consistently.
+**Category Classifier**
+A Logistic Regression model trained on TF-IDF vectors of Dutch product name strings, mapping each deal to a fixed product category taxonomy. Logistic Regression was chosen over alternatives (KNN, neural approaches) because it performs well on high-dimensional sparse text vectors, is interpretable, and establishes a solid baseline before adding complexity.
 
-**Discount Frequency Analysis**
-Identifying products on regular discount cycles to predict when a product is likely to go on sale next — giving users a reason to return beyond just browsing current deals.
-
----
-
-## 📌 Background
-
-This project started as a practical attempt to solve a real problem — keeping track of supermarket deals across multiple stores is time-consuming and fragmented. It has since evolved into a deeper exploration of data engineering, machine learning pipeline design, and product development.
-
-Built independently as a first startup attempt and data science learning project during the second year of a Computer Science degree.
+**Training Data**
+Manual labelling of a representative subset of scraped product names, with deliberate strategy around class imbalance across the taxonomy.

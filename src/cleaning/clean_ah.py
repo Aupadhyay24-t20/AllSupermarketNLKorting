@@ -15,12 +15,22 @@ def clean(raw_df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     return df_new, anomalies
 
 
+_MONTH_NORM = {
+    "january": "jan", "february": "feb", "march": "mrt", "april": "apr",
+    "may": "mei", "june": "jun", "july": "jul", "august": "aug",
+    "september": "sep", "october": "okt", "november": "nov", "december": "dec",
+    "januari": "jan", "februari": "feb", "maart": "mrt", "juni": "jun",
+    "juli": "jul", "augustus": "aug", "oktober": "okt",
+}
+
+
 def date_fixer(df):
     def parse_date_range(date_str):
         if not isinstance(date_str, str):
             return None, None
 
         cleaned = date_str.strip()
+        cleaned = ' '.join(_MONTH_NORM.get(t.lower(), t) for t in cleaned.split())
 
         same_month = re.match(r'(\d+)\s+(\d+)\s+(\w+)', cleaned)
         if same_month:

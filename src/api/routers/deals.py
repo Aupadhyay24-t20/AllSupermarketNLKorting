@@ -7,6 +7,12 @@ router = APIRouter(prefix="/deals", tags=["deals"])
 _NL_MONTHS = {
     "jan": 1, "feb": 2, "mrt": 3, "apr": 4, "mei": 5, "jun": 6,
     "jul": 7, "aug": 8, "sep": 9, "okt": 10, "nov": 11, "dec": 12,
+    # English full/abbreviated names — AH sometimes outputs these
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
+    # Full Dutch names
+    "januari": 1, "februari": 2, "maart": 3, "mei": 5, "juni": 6,
+    "juli": 7, "augustus": 8, "oktober": 10,
 }
 
 
@@ -35,7 +41,7 @@ def _is_active(deal: dict, today: date) -> bool:
     # year-boundary: deal starts in Dec, ends in Jan
     if end < start:
         end = date(year + 1, end.month, end.day)
-    return start <= today <= end
+    return today <= end
 
 
 def _recent_week_scraped_values(n: int = 3) -> list[str]:
