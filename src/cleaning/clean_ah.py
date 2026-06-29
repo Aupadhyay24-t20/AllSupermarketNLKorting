@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 def clean(raw_df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     raw_df["date"] = raw_df["date"].str.replace(" t/m ", " ")
@@ -14,16 +15,29 @@ def clean(raw_df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     return df_new, anomalies
 
 
-
 def date_fixer(df):
-    date = df["date"].str.split(expand=True)
-    start = date[0]
-    end = date[1]
-    month = date[2]
-    start_date = start + " " + month
-    end_date = end + " " + month
-    df["start_date"] = start_date
-    df["end_date"] = end_date
+    def parse_date_range(date_str):
+        if not isinstance(date_str, str):
+            return None, None
+
+        cleaned = date_str.strip()
+
+        same_month = re.match(r'(\d+)\s+(\d+)\s+(\w+)', cleaned)
+        if same_month:
+            day1, day2, month = same_month.groups()
+            return f"{day1} {month}", f"{day2} {month}"
+
+        diff_month = re.match(r'(\d+)\s+(\w+)\s+(\d+)\s+(\w+)', cleaned)
+        if diff_month:
+            day1, month1, day2, month2 = diff_month.groups()
+            return f"{day1} {month1}", f"{day2} {month2}"
+
+        print(f"[date_fixer] Unrecognised format: '{cleaned}'")
+        return None, None
+
+    df[["start_date", "end_date"]] = df["date"].apply(
+        lambda x: pd.Series(parse_date_range(x))
+    )
     return df
 
 def remove_klikbaar(df) -> tuple[pd.DataFrame, list[str]]:

@@ -64,3 +64,18 @@ jobs:
       - name: Fail if unexpected error (not anomaly halt)
         if: steps.pipeline.outputs.exit_code != '0' && steps.pipeline.outputs.exit_code != '42'
         run: exit 1
+
+      - name: Send success email
+        if: steps.pipeline.outputs.exit_code == '0'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          to: aditya141105@gmail.com
+          from: ${{ secrets.GMAIL_USERNAME }}
+          subject: "[Jumbo Pipeline] Scrape successful — run ${{ github.run_id }}"
+          body: |
+              Jumbo scrape completed successfully and data loaded to Supabase.
+              Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
