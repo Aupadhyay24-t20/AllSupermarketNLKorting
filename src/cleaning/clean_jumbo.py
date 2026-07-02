@@ -34,8 +34,9 @@ def wo_remove(text):
     text = text.replace(remove_2, "").strip()
     return text
 
-def split_date(date_val):
+DUTCH_DAYS = {'ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'}
 
+def split_date(date_val):
     if isinstance(date_val, list):
         cleaned = ' '.join(str(x) for x in date_val)
     else:
@@ -44,6 +45,12 @@ def split_date(date_val):
     cleaned = cleaned.replace('\xa0', ' ').replace('NBSP', '').strip()
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()
 
+    # Strip Dutch day-of-week prefix if present
+    parts = cleaned.split()
+    if parts and parts[0].lower() in DUTCH_DAYS:
+        cleaned = ' '.join(parts[1:])
+
+    # Existing regex patterns unchanged below
     same_month = re.match(r'(\d+)\s+(\d+)\s+(\w+)', cleaned)
     if same_month:
         day1, day2, month = same_month.groups()
@@ -54,7 +61,8 @@ def split_date(date_val):
         day1, month1, day2, month2 = diff_month.groups()
         return f"{day1} {month1}", f"{day2} {month2}"
 
-    return cleaned, cleaned
+    print(f"[split_date] Unrecognised format: '{cleaned}'")
+    return None, None
 
 def product_clean(text):
     word = "[Kompas JumRouterLink]"

@@ -85,7 +85,7 @@ if __name__ == '__main__':
     _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
     files = [
-        (os.path.join(_REPO_ROOT, 'data', 'J_cleaned_8.json'), '2026-06-24'),
+        (os.path.join(_REPO_ROOT, 'data', 'J_cleaned_9.json'), '2026-07-01'),
     ]
 
     total = 0
