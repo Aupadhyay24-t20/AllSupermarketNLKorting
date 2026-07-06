@@ -56,6 +56,14 @@ def extract_discount_pct(discount_text):
     return float(match.group(1)) if match else None
 
 
+def already_loaded_today(store_name: str, week: str) -> bool:
+    store_id = get_store_id(store_name)
+    if store_id is None:
+        return False
+    result = supabase.table('deals').select('id').eq('store_id', store_id).eq('week_scraped', week).limit(1).execute()
+    return len(result.data) > 0
+
+
 def load_to_supabase(filepath: str, week: str) -> int:
     with open(filepath, encoding='utf-8') as f:
         deals = json.load(f)

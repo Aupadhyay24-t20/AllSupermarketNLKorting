@@ -13,7 +13,7 @@ from src.scraping.webScrapper import albertijn_data, jumbo_data
 from src.cleaning.clean_ah import clean as clean_ah
 from src.cleaning.clean_jumbo import clean_jumbo
 from src.pipeline.anomaly import check_anomalies
-from src.cleaning.cleaned_data import load_to_supabase
+from src.cleaning.cleaned_data import load_to_supabase, already_loaded_today
 
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _RAW_DIR = os.path.join(_REPO_ROOT, 'data', 'raw')
@@ -28,14 +28,19 @@ def main():
     ts = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
     os.makedirs(_RAW_DIR, exist_ok=True)
 
+    week = date.today().isoformat()
+    store_name = 'Albertijn' if store_slug == 'ah' else 'Jumbo'
+
+    if already_loaded_today(store_name, week):
+        print(f"[pipeline] {store_name} data for {week} already in DB. Skipping.")
+        sys.exit(0)
+
     # --- Scrape ---
     print(f"[pipeline] Scraping {store_slug}...")
     if store_slug == 'ah':
         raw_data = albertijn_data()
-        store_name = 'Albertijn'
     else:
         raw_data = jumbo_data()
-        store_name = 'Jumbo'
 
     raw_path = os.path.join(_RAW_DIR, f'{store_slug}_{ts}.json')
     with open(raw_path, 'w', encoding='utf-8') as f:
@@ -71,7 +76,6 @@ def main():
         sys.exit(42)
 
     # --- Load ---
-    week = date.today().isoformat()
     cleaned_path = os.path.join(_RAW_DIR, f'{store_slug}_{ts}_cleaned.json')
     cleaned_df.to_json(cleaned_path, orient='records', indent=2, force_ascii=False)
 
