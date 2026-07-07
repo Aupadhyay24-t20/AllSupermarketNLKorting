@@ -1,8 +1,6 @@
 name: Scrape Jumbo
 
 on:
-  schedule:
-    - cron: '0 7 * * 3'  # Wednesday 07:00 UTC = 08:00 NL (winter CET); Jumbo refreshes Wednesdays
   workflow_dispatch:
 
 jobs:
