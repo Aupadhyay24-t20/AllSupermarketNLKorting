@@ -50,6 +50,43 @@ img { display: block; }
   }
 }
 
+/* ── Category strip ── */
+.cat-strip-scroll {
+  position: relative;
+}
+.cat-strip-scroll::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
+  background: linear-gradient(to right, transparent, var(--c-bg));
+  pointer-events: none;
+}
+.cat-strip-pills {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+  padding-bottom: 2px;
+  padding-right: 2.5rem;
+}
+.cat-strip-pills::-webkit-scrollbar { display: none; }
+
+@media (min-width: 900px) {
+  .cat-strip-scroll::after { display: none; }
+  .cat-strip-pills {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+    padding-right: 0;
+  }
+}
+
 @media (min-width: 769px) and (max-width: 1024px) {
   :root {
     --layout-pad:     1.75rem;

@@ -12,6 +12,8 @@ def clean(raw_df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
     df_new = df.copy()
     df_new["discount"] = df_new.apply(discount_name_cleaner, axis=1)
     df_new["discount"] = df_new["discount"].apply(winkel)
+    if 'category' in df_new.columns:
+        df_new['category'] = df_new['category'].fillna('Other')
     return df_new, anomalies
 
 

@@ -13,4 +13,4 @@ data/raw/
 data/*.json
 src/scraping/*.json
 server_run_instructions
-src/ml/__init__.py
+src/ml

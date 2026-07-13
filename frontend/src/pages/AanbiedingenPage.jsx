@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import Layout from '../components/layout/Layout'
-import { CategoryStrip } from '../components/ds/CategoryStrip'
+import { CategoryStrip, CAT_KEY_MAP } from '../components/ds/CategoryStrip'
 import { StoreChip } from '../components/ds/StoreChip'
 import { EmptyState } from '../components/ds/EmptyState'
 import { SearchInput } from '../components/ds/SearchInput'
@@ -41,7 +41,7 @@ export default function AanbiedingenPage() {
 
   const filteredDeals = allDeals === undefined ? undefined : allDeals.filter(deal => {
     if (activeStore !== 'all' && normalizeStoreName(deal.stores?.name) !== activeStore) return false
-    if (activeCat !== 'all') return false
+    if (activeCat !== 'all' && deal.category !== activeCat) return false
     if (searchTerms.length > 0) {
       const productLower = (deal.product ?? '').toLowerCase()
       if (!searchTerms.some(term => productLower.includes(term))) return false
@@ -50,11 +50,12 @@ export default function AanbiedingenPage() {
   })
 
   const count = filteredDeals?.length ?? 0
-  const title = activeCat !== 'all' ? t(`cats.${activeCat}`) : t('deals.title')
+  const activeCatKey = CAT_KEY_MAP[activeCat] ?? 'other'
+  const title = activeCat !== 'all' ? t(`cats.${activeCatKey}`) : t('deals.title')
   const subtitle = debouncedQuery.trim()
     ? t('deals.count', { count })
     : activeCat !== 'all'
-    ? t('deals.cat_subtitle', { count, cat: t(`cats.${activeCat}`) })
+    ? t('deals.cat_subtitle', { count, cat: t(`cats.${activeCatKey}`) })
     : t('deals.subtitle')
 
   return (

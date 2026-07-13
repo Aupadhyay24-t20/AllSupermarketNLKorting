@@ -23,6 +23,8 @@ def clean_jumbo(raw_df) -> tuple[pd.DataFrame, list[str]]:
     raw_df = raw_df[raw_df['product'] != 'Welke biermerken zijn bij jouw Jumbo in de aanbieding?']
     raw_df["discount"] = raw_df["discount"].apply(winkel)
     df = discount_filter(raw_df)
+    if 'category' in df.columns:
+        df['category'] = df['category'].fillna('Other')
     return df, anomalies
 
 
