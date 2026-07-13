@@ -3,6 +3,7 @@ import time
 from selenium.webdriver.common.by import By
 
 from src.scraping.base_scraper import BaseScraper
+from src.scraping.category_mapping import JUMBO_CATEGORY_MAP
 
 
 class JumboScraper(BaseScraper):
@@ -26,6 +27,15 @@ class JumboScraper(BaseScraper):
         driver = element.parent
         driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
         time.sleep(0.5)
+
+        try:
+            section = element.find_element(
+                By.XPATH, "ancestor::section[contains(@class, 'category-section')]"
+            )
+            raw_category = section.find_element(By.CSS_SELECTOR, '[data-testid="category-title"]').text
+            category = JUMBO_CATEGORY_MAP.get(raw_category)
+        except Exception:
+            category = None
 
         content = element.find_element(By.CSS_SELECTOR, '.content')
         validity = content.find_element(By.CSS_SELECTOR, '.subtitle')
@@ -68,4 +78,5 @@ class JumboScraper(BaseScraper):
             "store": self.STORE_NAME,
             "date": date,
             "image_url": image_url,
+            "category": category,
         }

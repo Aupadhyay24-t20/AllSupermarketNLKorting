@@ -47,6 +47,9 @@ def main():
         json.dump(raw_data, f, ensure_ascii=False, indent=2)
     print(f"[pipeline] Raw saved: {raw_path} ({len(raw_data)} items)")
 
+    if len(raw_data) == 0:
+        print(f"[pipeline] ERROR: Scraping returned 0 products for {store_slug}. Selector may be broken or site is blocking. Halting.")
+        sys.exit(1)
 
     print(f"[pipeline] Cleaning...")
     raw_df = pd.DataFrame(raw_data)

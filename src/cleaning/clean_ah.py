@@ -52,24 +52,24 @@ def date_fixer(df):
 
 def remove_klikbaar(df) -> tuple[pd.DataFrame, list[str]]:
     anomalies = []
-    df["discount"] = df["discount"].str[0]
-    df["discount"] = df["discount"].str.split(":")
-    df["discount"] = df["discount"].str[1]
+    def parse_discount(x):
+        if not isinstance(x, list) or not x:
+            return x
+        val = x[0]
+        if val and str(val).lower().startswith("klikbaar:"):
+            val = str(val).split(":", 1)[1].strip()
+        return val
+    df["discount"] = df["discount"].apply(parse_discount)
     null_count = df["discount"].isna().sum()
     if null_count > len(df) * 0.1:
         anomalies.append(
-            f"AH: {null_count}/{len(df)} discounts are null after removing 'Klikbaar:' — "
-            f"AH may have changed the aria-label format."
+            f"AH: {null_count}/{len(df)} discounts are null — scraper may have missed discount labels."
         )
     return df, anomalies
 
 def remove_OP(df, anomalies) -> tuple[pd.DataFrame, list[str]]:
     op_rows = df[df["product"].str.contains("OP=OP", case=True, na=False)]
-    if op_rows.empty:
-        anomalies.append(
-            "AH: OP=OP marker not found — page structure may have changed. Keeping all rows."
-        )
-    else:
+    if not op_rows.empty:
         df = df.loc[:op_rows.index[0] - 1]
     return df, anomalies
 
