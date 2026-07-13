@@ -82,7 +82,8 @@ def load_to_supabase(filepath: str, week: str) -> int:
             'start_date':       deal.get('start_date'),
             'end_date':         deal.get('end_date'),
             'week_scraped':     week,
-            'image_url':        deal.get('image_url')
+            'image_url':        deal.get('image_url'),
+            'category':         deal.get('category')
         })
 
     supabase.table('deals').insert(rows).execute()
