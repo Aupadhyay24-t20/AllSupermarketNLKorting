@@ -35,7 +35,7 @@ JUMBO_CATEGORY_MAP: dict[str, str] = {
     "Vlees, vis en vega":                   "Meat & Fish",
     "Brood en gebak":                       "Bakery",
     "Zuivel, boter en eieren":              "Dairy & Eggs",
-    "Vleeswaren, kaas en tapas":            "Meat & Fish",
+    "Vleeswaren, kaas en tapas":            "Cheese",
     "Vegetarisch en plantaardig":           "Meat & Fish",
     "Conserven, soepen, sauzen, oliën":     "Pantry & World Foods",
     "Wereldkeukens, kruiden, pasta en rijst": "Pantry & World Foods",

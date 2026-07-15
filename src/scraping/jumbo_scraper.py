@@ -1,9 +1,61 @@
 import time
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from src.scraping.base_scraper import BaseScraper
 from src.scraping.category_mapping import JUMBO_CATEGORY_MAP
+
+_JS_EXTRACT = """
+const results = [];
+for (const section of document.querySelectorAll('section.category-section')) {
+    const category = section.querySelector('[data-testid="category-title"]')?.textContent?.trim() || null;
+    for (const card of section.querySelectorAll('[data-testid="promotion-card"]')) {
+        const a = card.querySelector('a.title-link');
+        const img = card.querySelector('[data-testid="jum-card-image"] img');
+        const validity = card.querySelector('.content .subtitle');
+        const tagEl = card.querySelector('.image-container [data-testid="jum-tag"]');
+        let discount = 'No discount';
+        if (tagEl) {
+            const lower = tagEl.querySelector('.lower')?.textContent?.trim() || '';
+            const upper = tagEl.querySelector('.upper')?.textContent?.trim() || '';
+            discount = (upper + ' ' + lower).trim() || tagEl.textContent?.trim() || 'No discount';
+        }
+        results.push({
+            title:     a?.getAttribute('data-dd-action-name') || null,
+            href:      a?.href || null,
+            date:      validity?.textContent?.trim() || null,
+            image_url: img?.src || null,
+            discount:  discount,
+            category:  category,
+        });
+    }
+}
+// Orphan cards outside category sections — captured with null category
+for (const card of document.querySelectorAll('[data-testid="promotion-card"]')) {
+    if (!card.closest('section.category-section')) {
+        const a = card.querySelector('a.title-link');
+        const img = card.querySelector('[data-testid="jum-card-image"] img');
+        const validity = card.querySelector('.content .subtitle');
+        const tagEl = card.querySelector('.image-container [data-testid="jum-tag"]');
+        let discount = 'No discount';
+        if (tagEl) {
+            const lower = tagEl.querySelector('.lower')?.textContent?.trim() || '';
+            const upper = tagEl.querySelector('.upper')?.textContent?.trim() || '';
+            discount = (upper + ' ' + lower).trim() || tagEl.textContent?.trim() || 'No discount';
+        }
+        results.push({
+            title:     a?.getAttribute('data-dd-action-name') || null,
+            href:      a?.href || null,
+            date:      validity?.textContent?.trim() || null,
+            image_url: img?.src || null,
+            discount:  discount,
+            category:  null,
+        });
+    }
+}
+return results;
+"""
 
 
 class JumboScraper(BaseScraper):
@@ -23,60 +75,37 @@ class JumboScraper(BaseScraper):
                 break
             last_count = current_count
 
+    def scrape(self) -> list[dict]:
+        driver = self._build_driver()
+        try:
+            driver.get(self.BASE_URL)
+            wait = WebDriverWait(driver, 10)
+            self._accept_cookies(driver, wait)
+            self._load_more(driver)
+
+            raw = driver.execute_script(_JS_EXTRACT)
+            print(f"Jumbo: {len(raw)} promotion-cards found")
+
+            products = []
+            for item in raw:
+                if not item.get('title'):
+                    continue
+                raw_category = item.get('category')
+                category = JUMBO_CATEGORY_MAP.get(raw_category) if raw_category else None
+                print(f"Product: {item['title']} | {item.get('discount')} | Category: {category} (raw: {raw_category})")
+                products.append({
+                    'product':   item['title'],
+                    'discount':  item.get('discount', 'No discount'),
+                    'link':      item.get('href'),
+                    'store':     self.STORE_NAME,
+                    'date':      item.get('date'),
+                    'image_url': item.get('image_url'),
+                    'category':  category,
+                })
+            return products
+        finally:
+            driver.quit()
+
     def _extract_product(self, element, context: dict) -> dict | None:
-        driver = element.parent
-        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-        time.sleep(0.5)
-
-        try:
-            section = element.find_element(
-                By.XPATH, "ancestor::section[contains(@class, 'category-section')]"
-            )
-            raw_category = section.find_element(By.CSS_SELECTOR, '[data-testid="category-title"]').text
-            category = JUMBO_CATEGORY_MAP.get(raw_category)
-        except Exception:
-            category = None
-
-        content = element.find_element(By.CSS_SELECTOR, '.content')
-        validity = content.find_element(By.CSS_SELECTOR, '.subtitle')
-        date = validity.text
-        main_title = content.find_element(By.CSS_SELECTOR, '[data-testid="jum-heading"]')
-        a_tag = main_title.find_element(By.CSS_SELECTOR, "a.title-link")
-        title = a_tag.get_attribute("data-dd-action-name")
-        href = a_tag.get_attribute("href")
-
-        discount_info = "No discount"
-        image_container = element.find_element(By.CSS_SELECTOR, '.image-container')
-        jum_tags = image_container.find_elements(By.CSS_SELECTOR, '[data-testid="jum-tag"]')
-        if jum_tags:
-            tag = jum_tags[0]
-            lower_els = tag.find_elements(By.CSS_SELECTOR, '.lower')
-            upper_els = tag.find_elements(By.CSS_SELECTOR, '.upper')
-            if lower_els or upper_els:
-                lower = lower_els[0].text.strip() if lower_els else ""
-                upper = upper_els[0].text.strip() if upper_els else ""
-                discount_info = f"{upper} {lower}".strip()
-            else:
-                discount_info = tag.text.strip()
-
-        try:
-            img_element = element.find_element(By.CSS_SELECTOR, '[data-testid="jum-card-image"] img')
-            image_url = img_element.get_attribute("src")
-        except Exception:
-            image_url = None
-
-        print(f"Product: {title}")
-        print(f"     Discount: {discount_info}")
-        print(f"     Link: {href}")
-        print(f"     Date: {date}")
-        print(f"     Image: {image_url}")
-
-        return {
-            "product": title,
-            "discount": discount_info,
-            "link": href,
-            "store": self.STORE_NAME,
-            "date": date,
-            "image_url": image_url,
-            "category": category,
-        }
+        # Not used — JumboScraper overrides scrape() with JS batch extraction
+        return None
