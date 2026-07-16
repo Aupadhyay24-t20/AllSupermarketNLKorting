@@ -6,6 +6,7 @@ import AanbiedingenPage from './pages/AanbiedingenPage'
 import OverOnsPage from './pages/OverOnsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import CookiePolicyPage from './pages/CookiePolicyPage'
+import GetAppPage from './pages/GetAppPage'
 import { CookieBanner } from './components/ds/CookieBanner'
 import { trackPageView } from './utils/analytics'
 
@@ -30,6 +31,7 @@ function AnimatedRoutes() {
           <Route path="/aanbiedingen" element={<AanbiedingenPage />} />
           <Route path="/over-ons" element={<OverOnsPage />} />
           <Route path="/cookies" element={<CookiePolicyPage />} />
+          <Route path="/get-app" element={<GetAppPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </motion.div>

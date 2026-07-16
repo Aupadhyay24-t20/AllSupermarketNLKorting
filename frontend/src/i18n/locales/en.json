@@ -2,7 +2,8 @@
   "nav": {
     "home": "Home",
     "deals": "Deals",
-    "about": "About Us"
+    "about": "About Us",
+    "app": "Get App"
   },
   "home": {
     "page_title": "Fresco | Fresh deals from AH & Jumbo",
@@ -99,6 +100,37 @@
     "decline": "Decline",
     "link": "More info",
     "trust": "No personal data · No ads · Always reversible"
+  },
+  "app": {
+    "page_title": "Get the App | Fresco",
+    "h1_line1": "Get Fresco",
+    "h1_line2": "on your phone.",
+    "desc": "Install Fresco from your browser. No App Store, no download.",
+    "selector_title": "Which device do you have?",
+    "selector_sub": "We'll show you the exact steps for your phone.",
+    "back": "Choose device",
+    "safari_note": "Use Safari on iPhone. Chrome does not support installation.",
+    "chrome_note": "Use Chrome on Android for best results.",
+    "step1": "Open Fresco in Safari",
+    "step2": "Tap the Share button at the bottom",
+    "step3": "Scroll down, tap 'Add to Home Screen'",
+    "step4": "Tap 'Add' in the top-right corner",
+    "step5": "Fresco is on your home screen!",
+    "android_step1": "Open Fresco in Chrome",
+    "android_step2": "Tap the menu button at the top right",
+    "android_step3": "Tap 'Install and create shortcut'",
+    "android_step4": "Tap 'Install' to confirm",
+    "android_step5": "Fresco is on your home screen!",
+    "why_title": "Why install the app?",
+    "why_sub": "All the benefits of a native app, straight from your browser",
+    "feat1_title": "Instant access",
+    "feat1_body": "Opens straight from your home screen in full screen, just like a real app.",
+    "feat2_title": "Feels native",
+    "feat2_body": "No browser chrome, no distractions. A clean app experience on any phone.",
+    "feat3_title": "No App Store needed",
+    "feat3_body": "Install in seconds without an account or download. Always up to date automatically.",
+    "feat4_title": "Same privacy",
+    "feat4_body": "Your cookie preferences carry over. Nothing changes — just a shortcut to Fresco."
   },
   "notfound": {
     "title": "Page not found",

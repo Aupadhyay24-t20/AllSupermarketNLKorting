@@ -14,6 +14,7 @@ export default function Header() {
     { label: t('nav.home'), to: '/' },
     { label: t('nav.deals'), to: '/aanbiedingen' },
     { label: t('nav.about'), to: '/over-ons' },
+    { label: t('nav.app'), to: '/get-app' },
   ]
 
   useEffect(() => {

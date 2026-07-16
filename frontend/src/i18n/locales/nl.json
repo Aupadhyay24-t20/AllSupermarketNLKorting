@@ -2,7 +2,8 @@
   "nav": {
     "home": "Home",
     "deals": "Aanbiedingen",
-    "about": "Over Ons"
+    "about": "Over Ons",
+    "app": "Download App"
   },
   "home": {
     "page_title": "Fresco | Verse deals van AH & Jumbo",
@@ -99,6 +100,37 @@
     "decline": "Weigeren",
     "link": "Meer info",
     "trust": "Geen persoonsgegevens · Geen advertenties · Altijd intrekbaar"
+  },
+  "app": {
+    "page_title": "Download de app | Fresco",
+    "h1_line1": "Haal Fresco",
+    "h1_line2": "op je telefoon.",
+    "desc": "Installeer Fresco via je browser. Geen App Store, geen download.",
+    "selector_title": "Welk apparaat gebruik je?",
+    "selector_sub": "We tonen je de exacte stappen voor jouw telefoon.",
+    "back": "Kies apparaat",
+    "safari_note": "Gebruik Safari op iPhone. Chrome ondersteunt installatie niet.",
+    "chrome_note": "Gebruik Chrome op Android voor de beste ervaring.",
+    "step1": "Open Fresco in Safari",
+    "step2": "Tik op de Delen-knop onderaan",
+    "step3": "Scroll naar beneden, tik 'Toevoegen aan startscherm'",
+    "step4": "Tik op 'Voeg toe' rechtsboven",
+    "step5": "Fresco staat op je startscherm!",
+    "android_step1": "Open Fresco in Chrome",
+    "android_step2": "Tik op de menuknop rechtsboven",
+    "android_step3": "Tik op 'App installeren'",
+    "android_step4": "Tik op 'Installeer' om te bevestigen",
+    "android_step5": "Fresco staat op je startscherm!",
+    "why_title": "Waarom de app installeren?",
+    "why_sub": "Alle voordelen van een echte app, rechtstreeks vanuit je browser",
+    "feat1_title": "Direct toegang",
+    "feat1_body": "Opent direct vanaf je startscherm in volledig scherm, net als een echte app.",
+    "feat2_title": "Voelt als een echte app",
+    "feat2_body": "Geen browserbalk, geen afleidingen. Een strakke app-ervaring op elke telefoon.",
+    "feat3_title": "Geen App Store nodig",
+    "feat3_body": "Installeer in seconden zonder account of download. Altijd automatisch up-to-date.",
+    "feat4_title": "Zelfde privacy",
+    "feat4_body": "Je cookievoorkeuren blijven gewoon actief. Niets verandert — alleen een snelkoppeling naar Fresco."
   },
   "notfound": {
     "title": "Pagina niet gevonden",
