@@ -105,7 +105,7 @@ def get_featured_deals():
     active = [d for d in all_data if _is_active(d, today)]
 
     result = []
-    for store_name in ("Albertijn", "Jumbo"):
+    for store_name in ("Albert Heijn", "Jumbo"):
         clicked = [d for d in active if d.get("stores", {}).get("name") == store_name and (d.get("click_count") or 0) > 0]
         unclicked = [d for d in active if d.get("stores", {}).get("name") == store_name and (d.get("click_count") or 0) == 0]
         random.shuffle(unclicked)
