@@ -35,7 +35,7 @@ export default function DealGrid({ deals: dealsProp, limit, featureFirst = false
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (dealsProp !== undefined) return
+    if (dealsProp !== undefined) return  // null = parent loading; array = parent provided
 
     fetch(`${import.meta.env.VITE_API_URL}/deals`)
       .then(res => {
@@ -53,8 +53,8 @@ export default function DealGrid({ deals: dealsProp, limit, featureFirst = false
       })
   }, [dealsProp])
 
-  const deals = dealsProp !== undefined ? dealsProp : fetchedDeals
-  const loading = dealsProp === undefined && fetching
+  const deals = Array.isArray(dealsProp) ? dealsProp : fetchedDeals
+  const loading = dealsProp === null || (dealsProp === undefined && fetching)
 
   if (loading) {
     return (

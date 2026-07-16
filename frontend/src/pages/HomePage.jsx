@@ -41,7 +41,7 @@ const STORES = [
 
 export default function HomePage() {
   const { t } = useTranslation()
-  const [allDeals, setAllDeals] = useState(undefined)
+  const [allDeals, setAllDeals] = useState(null)
 
   const STATS = [
     { value: '500+', label: t('home.stat_deals_label') },
