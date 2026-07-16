@@ -50,7 +50,7 @@ export default function HomePage() {
   ]
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/deals/`)
+    fetch(`${import.meta.env.VITE_API_URL}/deals/featured`)
       .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
       .then(data => setAllDeals(Array.isArray(data.data) ? data.data : []))
       .catch(() => setAllDeals([]))
@@ -140,7 +140,7 @@ export default function HomePage() {
             </div>
             <Link to="/aanbiedingen"><Button variant="secondary" size="sm">{t('home.all_deals_btn')}</Button></Link>
           </div>
-          <DealGrid deals={allDeals} limit={8} featureFirst />
+          <DealGrid deals={allDeals} featureFirst />
         </div>
       </section>
 

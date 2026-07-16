@@ -108,6 +108,7 @@ function formatEndDate(dateStr) {
 
 export function mapDealToCardProps(deal) {
   return {
+    id: deal.id,
     product: deal.product,
     imageUrl: deal.image_url,
     store: normalizeStoreName(deal.stores?.name),

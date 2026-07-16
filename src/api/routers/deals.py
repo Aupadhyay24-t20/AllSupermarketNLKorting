@@ -88,6 +88,39 @@ def get_deals(
     return {"data": data, "total": len(data)}
 
 
+@router.get("/featured")
+def get_featured_deals():
+    import random
+    today = date.today()
+    recent_weeks = _recent_week_scraped_values(3)
+
+    all_data = (
+        supabase.table("deals")
+        .select("*, stores(name, logo_url), discount_types(label)")
+        .in_("week_scraped", recent_weeks)
+        .order("click_count", desc=True)
+        .execute()
+        .data
+    )
+    active = [d for d in all_data if _is_active(d, today)]
+
+    result = []
+    for store_name in ("Albertijn", "Jumbo"):
+        clicked = [d for d in active if d.get("stores", {}).get("name") == store_name and (d.get("click_count") or 0) > 0]
+        unclicked = [d for d in active if d.get("stores", {}).get("name") == store_name and (d.get("click_count") or 0) == 0]
+        random.shuffle(unclicked)
+        result += (clicked + unclicked)[:5]
+
+    return {"data": result, "total": len(result)}
+
+
+@router.post("/{deal_id}/click", status_code=204)
+def record_click(deal_id: int):
+    row = supabase.table("deals").select("click_count").eq("id", deal_id).single().execute()
+    count = (row.data.get("click_count") or 0) + 1
+    supabase.table("deals").update({"click_count": count}).eq("id", deal_id).execute()
+
+
 @router.get("/search")
 def search_deals(q: str = Query(..., min_length=2)):
     today = date.today()

@@ -51,11 +51,12 @@ function PriceArea({ discount }) {
  * tinted image area with corner badge, store-colored label, product name,
  * price/discount area, bottom badge, validity, CTA.
  */
-export function DealCard({ product, imageUrl, store, endDate, link, discount, featured = false, style }) {
+export function DealCard({ id, product, imageUrl, store, endDate, link, discount, featured = false, style }) {
   const [imgError, setImgError] = useState(false)
   const open = () => {
     if (!link) return
     trackDealClick(product, store)
+    if (id) fetch(`${import.meta.env.VITE_API_URL}/deals/${id}/click`, { method: 'POST' }).catch(() => {})
     window.open(link, '_blank', 'noopener,noreferrer')
   }
 
