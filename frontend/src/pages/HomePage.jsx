@@ -83,9 +83,6 @@ export default function HomePage() {
           animate="visible"
           style={{ maxWidth: 'var(--layout-max)', margin: '0 auto', padding: '0 var(--layout-pad)', position: 'relative' }}
         >
-          <motion.div variants={fadeUp} style={{ marginBottom: '1.75rem' }}>
-            <Badge>{t('home.badge')}</Badge>
-          </motion.div>
 
           <motion.h1
             variants={fadeUp}
@@ -140,7 +137,7 @@ export default function HomePage() {
             </div>
             <Link to="/aanbiedingen"><Button variant="secondary" size="sm">{t('home.all_deals_btn')}</Button></Link>
           </div>
-          <DealGrid deals={allDeals} featureFirst />
+          <DealGrid deals={allDeals} />
         </div>
       </section>
 

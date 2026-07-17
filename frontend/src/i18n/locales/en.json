@@ -17,8 +17,8 @@
     "stat_stores_label": "Supermarkets",
     "stat_free_value": "Free",
     "stat_free_label": "Always & for everyone",
-    "featured_title": "Best deals this week",
-    "featured_sub": "Weekly updated from AH & Jumbo",
+    "featured_title": "Deals this week",
+    "featured_sub": "A preview of deals from AH & Jumbo",
     "all_deals_btn": "All deals →",
     "stores_title": "Our supermarkets",
     "stores_sub": "Deals from two of the largest supermarkets in the Netherlands",
@@ -83,7 +83,7 @@
     "step3_title": "Go to the store",
     "step3_body": "Click 'View deal' to go straight to the offer on the AH or Jumbo website.",
     "disclaimer_title": "Good to know",
-    "disclaimer_body": "Fresco only shows deals valid in physical stores. Online delivery deals are not included. Prices may vary, so always check the supermarket website or app for the latest information."
+    "disclaimer_body": "Fresco only shows deals valid in physical stores. Online delivery deals are not included. Click 'View deal' to go directly to the supermarket and verify the deal."
   },
   "footer": {
     "tagline": "All supermarket deals in one place.",

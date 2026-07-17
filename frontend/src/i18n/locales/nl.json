@@ -17,8 +17,8 @@
     "stat_stores_label": "Supermarkten",
     "stat_free_value": "Gratis",
     "stat_free_label": "Altijd & voor iedereen",
-    "featured_title": "Beste deals deze week",
-    "featured_sub": "Wekelijks vernieuwd van AH & Jumbo",
+    "featured_title": "Deals deze week",
+    "featured_sub": "Een voorproefje van deals van AH & Jumbo",
     "all_deals_btn": "Alle aanbiedingen →",
     "stores_title": "Onze supermarkten",
     "stores_sub": "Deals van twee van de grootste supermarkten in Nederland",
@@ -83,7 +83,7 @@
     "step3_title": "Ga naar de winkel",
     "step3_body": "Klik op 'Bekijk deal' om direct naar de aanbieding op de site van AH of Jumbo te gaan.",
     "disclaimer_title": "Let op",
-    "disclaimer_body": "Fresco toont alleen aanbiedingen die geldig zijn in de fysieke winkel. Online bezorgdeals zijn niet inbegrepen. Prijzen kunnen afwijken, check altijd de website of app van de supermarkt voor de meest actuele informatie."
+    "disclaimer_body": "Fresco toont alleen aanbiedingen die geldig zijn in de fysieke winkel. Online bezorgdeals zijn niet inbegrepen. Klik op 'Bekijk deal' om naar de supermarkt te gaan en de deal te bevestigen."
   },
   "footer": {
     "tagline": "Alle supermarkt aanbiedingen op één plek.",
