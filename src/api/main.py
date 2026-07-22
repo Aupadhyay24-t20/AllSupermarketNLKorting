@@ -7,9 +7,12 @@ app = FastAPI(title="SuperDeal API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "https://getfresco.nl",
+        "https://www.getfresco.nl",
+    ],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 
 app.include_router(deals.router)
